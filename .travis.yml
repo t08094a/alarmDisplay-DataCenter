@@ -16,7 +16,7 @@ cache:
     - $HOME/.yarn-cache
 env:
   global:
-    - NODE_VERSION=8.9.1
+    - NODE_VERSION=8.11.3
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
 before_install:
@@ -45,6 +45,11 @@ script:
     curl -L -o qemu-arm-static.tar.gz https://github.com/multiarch/qemu-user-static/releases/download/v2.6.0/qemu-arm-static.tar.gz &&
     tar xzf qemu-arm-static.tar.gz &&
     popd
+
+    pwd
+    find ./ -name "*.war"
+    find / -name "*.war"
+
   # build image
   - docker build -t t08094a/rpi-alarmdisplay-datacenter:build -f ./src/main/docker/Dockerfile.arm64 .
   # test image
