@@ -13,7 +13,7 @@ script:
   tar xzf qemu-arm-static.tar.gz &&
   popd
 # build image
-- docker build -t t08094a/rpi-alarmdisplay-datacenter:build ./src/main/docker/Dockerfile.arm64
+- docker build -t t08094a/rpi-alarmdisplay-datacenter:build -f ./src/main/docker/Dockerfile.arm64 .
 # test image
 - docker run t08094a/rpi-alarmdisplay-datacenter:build uname -a
 # push image
