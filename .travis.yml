@@ -9,6 +9,7 @@ node_js:
 jdk:
   - oraclejdk8
 cache:
+  yarn: true
   directories:
     - node
     - node_modules
@@ -43,11 +44,6 @@ script:
     curl -L -o qemu-arm-static.tar.gz https://github.com/multiarch/qemu-user-static/releases/download/v2.6.0/qemu-arm-static.tar.gz &&
     tar xzf qemu-arm-static.tar.gz &&
     popd
-
-  - pwd
-  - find ./ -name "*.war"
-  - find / -name "*.war"
-
   # build image
   - docker build -t t08094a/rpi-alarmdisplay-datacenter:build -f ./src/main/docker/Dockerfile.arm64 .
   # test image
