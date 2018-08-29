@@ -5,7 +5,7 @@ services:
   - docker
 language: bash node_js
 node_js:
-  - "10.9.0"
+  - "8.9.1"
 jdk:
   - oraclejdk8
 cache:
@@ -16,12 +16,12 @@ cache:
     - $HOME/.yarn-cache
 env:
   global:
-    - NODE_VERSION=10.9.0
+    - NODE_VERSION=8.9.1
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
 before_install:
-  - nvm ls
   - node -v
+  - yarn -v
   - jdk_switcher use oraclejdk8
   - java -version
   - sudo /etc/init.d/mysql stop
@@ -29,8 +29,8 @@ before_install:
   # Repo for Yarn
   - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.9.4
   - export PATH="$HOME/.yarn/bin:$PATH"
-  - nvm ls
   - node -v
+  - yarn -v
 install:
   - yarn install
 script:
