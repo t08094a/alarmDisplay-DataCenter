@@ -20,13 +20,17 @@ env:
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
 before_install:
+  - nvm ls
+  - node -v
   - jdk_switcher use oraclejdk8
   - java -version
-  #- sudo /etc/init.d/mysql stop
-  #- sudo /etc/init.d/postgresql stop
+  - sudo /etc/init.d/mysql stop
+  - sudo /etc/init.d/postgresql stop
   # Repo for Yarn
-  - curl -o- -L https://yarnpkg.com/install.sh | bash
-  - export PATH=$HOME/.yarn/bin:$PATH
+  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.9.4
+  - export PATH="$HOME/.yarn/bin:$PATH"
+  - nvm ls
+  - node -v
 install:
   - yarn install
 script:
