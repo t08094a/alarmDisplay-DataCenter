@@ -3,7 +3,7 @@ os:
 sudo: required
 services:
   - docker
-language: node_js
+language: bash, node_js
 node_js:
   - "10.9.0"
 jdk:
