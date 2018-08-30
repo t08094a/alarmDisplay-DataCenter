@@ -34,6 +34,7 @@ script:
   - chmod +x mvnw
   #- ./mvnw clean test
   - yarn test
+  - yarn build
   - ./mvnw verify -Pprod -DskipTests
   # prepare qemu
   - docker run --rm --privileged multiarch/qemu-user-static:register --reset
