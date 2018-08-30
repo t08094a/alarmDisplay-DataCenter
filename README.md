@@ -1,4 +1,4 @@
-Travis-CI: [![Build Status](https://travis-ci.org/t08094a/alarmDisplay-DataCenter.svg?branch=master)](https://travis-ci.org/t08094a/alarmDisplay-DataCenter)
+[![Build Status](https://travis-ci.org/t08094a/alarmDisplay-DataCenter.svg?branch=master)](https://travis-ci.org/t08094a/alarmDisplay-DataCenter)
 
 
 # alarmDisplay-DataCenter
