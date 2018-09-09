@@ -6,7 +6,7 @@
     <artifactId>data-center</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
-    <name>Data Center</name>
+    <name>Alarm Monitor Data Center</name>
 
     <properties>
         <!-- Build properties -->
