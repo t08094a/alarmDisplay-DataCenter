@@ -6,7 +6,13 @@ sudo: required
 services:
   - docker
 
-language: bash
+language: node_js
+
+node_js:
+  - "8.11.3"
+
+jdk:
+  - oraclejdk8
 
 cache:
   yarn: true
@@ -19,15 +25,32 @@ cache:
 env:
   global:
     - VERSION=1.${TRAVIS_BUILD_NUMBER}
+    - NODE_VERSION=8.11.3
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
 
 before_install:
+  - jdk_switcher use oraclejdk8
+  - java -version
+  - sudo /etc/init.d/mysql stop
+  - sudo /etc/init.d/postgresql stop
+  # Repo for Yarn
+  - curl -o- -L https://yarnpkg.com/install.sh | bash -s
+  - export PATH="$HOME/.yarn/bin:$PATH"
+
   - wget https://github.com/clnperez/cli/releases/download/1.0/docker-linux-amd64
   - chmod 755 docker-linux-amd64
   - docker pull multiarch/qemu-user-static:register
   - docker run --rm --privileged multiarch/qemu-user-static:register --reset
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+
+install:
+  - yarn install
+  - chmod +x mvnw
+  #- ./mvnw clean test
+  - yarn test
+  - yarn build
+  - ./mvnw verify -Pprod -DskipTests
 
 script:
   - make amd64
