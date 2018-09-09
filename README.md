@@ -2,9 +2,30 @@
 
 
 # alarmDisplay-DataCenter
+
 central data storage and administration for the alarm display project
 
-This application was generated using JHipster 4.14.4, you can find documentation and help at [http://www.jhipster.tech/documentation-archive/v4.14.4](http://www.jhipster.tech/documentation-archive/v4.14.4).
+The following architectures are supported:
+* amd64
+* arm64v8
+* arm32v7
+
+
+## Travis CI
+Current build status: [![Build Status](https://travis-ci.org/t08094a/alarmDisplay-DataCenter.svg?branch=master)](https://travis-ci.org/t08094a/alarmDisplay-DataCenter)
+
+Define following environment variables:
+* DOCKER_USERNAME
+* DOCKER_PASSWORD
+* IMAGE_NAME
+* REPO
+
+## Generate Dockerfiles
+```console
+make amd64   -> Dockerfile.amd64
+make arm64v8 -> Dockerfile.arm64v8
+make arm32v7 -> Dockerfile.arm32v7
+```
 
 ## Development
 

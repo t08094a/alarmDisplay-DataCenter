@@ -150,3 +150,17 @@ Desktop.ini
 # ESLint
 ######################
 .eslintcache
+qemu-aarch64-static
+
+######################
+# Docker Architecture specific file
+# theese are generated
+######################
+Dockerfile*
+!Dockerfile.cross
+
+######################
+# QEmu
+######################
+qemu-arm-static
+qemu-aarch64-static
