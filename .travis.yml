@@ -30,6 +30,7 @@ env:
     - SPRING_JPA_SHOW_SQL=false
 
 before_install:
+  - sudo apt-get install -y -qq coreutils
   - jdk_switcher use oraclejdk8
   - java -version
   - sudo /etc/init.d/mysql stop
