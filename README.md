@@ -1,6 +1,6 @@
 # alarmDisplay-DataCenter
 
-central data storage and administration for the alarm display project
+The central data storage and administration for the alarm display project.
 
 The following architectures are supported:
 * amd64
@@ -11,18 +11,15 @@ The following architectures are supported:
 ## Travis CI
 Current build status: [![Build Status](https://travis-ci.org/t08094a/alarmDisplay-DataCenter.svg?branch=master)](https://travis-ci.org/t08094a/alarmDisplay-DataCenter)
 
-Define following environment variables:
+Define following environment variables in Travis:
 * DOCKER_USERNAME
 * DOCKER_PASSWORD
-* IMAGE_NAME
-* REPO
 
-## Generate Dockerfiles
-```console
-make amd64   -> Dockerfile.amd64
-make arm64v8 -> Dockerfile.arm64v8
-make arm32v7 -> Dockerfile.arm32v7
-```
+## Generate Docker Images
+1. initialize the local repository after cloning: `init-repo.sh`
+2. Configure the docker hub settings and target platforms: `build.config`
+3. Build the source and create docker images: `build.sh`
+
 
 ## Development
 

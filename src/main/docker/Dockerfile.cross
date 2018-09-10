@@ -2,9 +2,9 @@
 ## Architecture: __BASEIMAGE_ARCH__
 #########################
 
-FROM openjdk:8-jre-alpine
-ARG ARCH=__BASEIMAGE_ARCH__
-__CROSS_COPY qemu-__QEMU_ARCH__-static /usr/bin/qemu-__QEMU_ARCH__-static
+FROM __BASEIMAGE_ARCH__/openjdk:__OPENJDK_TAG__
+
+__CROSS_COPY qemu/qemu-__QEMU_ARCH__-static /usr/bin/
 
 WORKDIR /app
 
@@ -13,10 +13,9 @@ ENV SPRING_OUTPUT_ANSI_ENABLED=ALWAYS \
     JAVA_OPTS=""
 
 # copy sources to app directory
-COPY . /app/
+COPY . .
 
-
-RUN ln -s /app/data-center*.war /app/app.war
+RUN mv *.war app.war && rm -rf qemu*
 
 CMD echo "The application will start in ${JHIPSTER_SLEEP}s..." && \
     sleep ${JHIPSTER_SLEEP} && \

@@ -158,9 +158,10 @@ qemu-aarch64-static
 ######################
 Dockerfile*
 !Dockerfile.cross
+docker-linux-amd64
 
 ######################
-# QEmu
+# qemu
 ######################
-qemu-arm-static
-qemu-aarch64-static
+/qemu
+
