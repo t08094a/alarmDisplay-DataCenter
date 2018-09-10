@@ -80,7 +80,7 @@ for docker_arch in ${TARGET_ARCHES}; do
 
   # copy qemu to target
   mkdir -p ${target_dir}/qemu
-  cp ${base_dir}/qemu/qemu-${qemu_arch}-static ${target_dir}/qemu/qemu-${qemu_arch}-static
+  [ -e ${base_dir}/qemu/qemu-${qemu_arch}-static ] && cp ${base_dir}/qemu/qemu-${qemu_arch}-static ${target_dir}/qemu/qemu-${qemu_arch}-static
 
   pushd ${target_dir}
 
