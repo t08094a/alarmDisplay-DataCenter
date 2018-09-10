@@ -45,7 +45,7 @@ if [[ -z ${IMAGE_VERSION} ]]; then
 fi
 
 # Build source
-yarn
+yarn install
 yarn build
 ./mvnw package -Pprod -Ddockerfile.skip
 
