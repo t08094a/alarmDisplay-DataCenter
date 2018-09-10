@@ -45,9 +45,9 @@ if [[ -z ${IMAGE_VERSION} ]]; then
 fi
 
 # Build source
-#yarn
-#yarn build
-#./mvnw package -Pprod -Ddockerfile.skip
+yarn
+yarn build
+./mvnw package -Pprod -Ddockerfile.skip
 
 # Build docker images
 base_dir=$(dirname "$(realpath "$0")" )
