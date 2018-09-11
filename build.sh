@@ -32,7 +32,7 @@ case ${build_uname_arch} in
     ;;
 esac
 
-docker_bin_path=$(realpath $( type -P docker-${build_os}-${build_arch} || type -P ${DOCKER_CLI_PATH%/}/docker-${build_os}-${build_arch} || echo docker-not-found ))
+docker_bin_path=$(readlink -f $( type -P docker-${build_os}-${build_arch} || type -P ${DOCKER_CLI_PATH%/}/docker-${build_os}-${build_arch} || echo docker-not-found ))
 echo docker_bin_path: ${docker_bin_path}
 
 if [[ ! -x ${docker_bin_path} ]]; then
@@ -50,7 +50,7 @@ yarn build
 ./mvnw package -Pprod -Ddockerfile.skip
 
 # Build docker images
-base_dir=$(dirname "$(realpath "$0")" )
+base_dir=$(dirname "$(readlink -f "$0")" )
 target_dir=${base_dir}/target
 dockerfile_dir=${base_dir}/src/main/docker
 
