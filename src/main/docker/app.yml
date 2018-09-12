@@ -2,6 +2,8 @@ version: '3'
 services:
     datacenter-app:
         image: t08094a/alarmdisplay-datacenter:latest
+        hostname: alarmdisplay
+        domainname: alarmdisplay.local
         environment:
             - SPRING_PROFILES_ACTIVE=prod,swagger
             - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017
@@ -56,8 +58,25 @@ services:
             - network_backend
             - network_frontend
 
+    mqttserver:
+        image: rabbitmq:management-alpine
+        ports:
+            - "9001:5672"
+            - "9002:15672"
+        networks:
+            - network_backend
+        environment:
+            - RABBITMQ_DEFAULT_USER=admin
+            - RABBITMQ_DEFAULT_PASS=admin
+        volumes:
+            - rabbitmq_volume:/var/lib/rabbitmq
+        deploy:
+            restart_policy:
+                condition: on-failure
+
 volumes:
     db_volume:
+    rabbitmq_volume:
 
 networks:
   network_backend:
