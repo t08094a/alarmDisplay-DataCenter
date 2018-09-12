@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
     datacenter-sonar:
         image: sonarqube:6.5-alpine

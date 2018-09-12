@@ -1,9 +1,9 @@
-version: '2'
+version: '3'
 services:
     zookeeper:
         image: wurstmeister/zookeeper:3.4.6
         ports:
-          - 2181:2181
+          - "2181:2181"
     kafka:
         image: wurstmeister/kafka:1.0.0
         environment:
@@ -12,4 +12,4 @@ services:
             KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
             KAFKA_CREATE_TOPICS: "topic-jhipster:1:1"
         ports:
-            - 9092:9092
+            - "9092:9092"
