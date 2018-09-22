@@ -54,6 +54,9 @@ base_dir=$(dirname "$(readlink -f "$0")" )
 target_dir=${base_dir}/target
 dockerfile_dir=${base_dir}/src/main/docker
 
+# Register QEMU in the build agent
+docker run --rm --privileged multiarch/qemu-user-static:register --reset
+
 for docker_arch in ${TARGET_ARCHES}; do
   echo ========  build: ${docker_arch}  ========
 
@@ -89,8 +92,8 @@ for docker_arch in ${TARGET_ARCHES}; do
   arch_images="${arch_images} ${REPO}/${IMAGE_NAME}:${docker_arch}-${IMAGE_VERSION}"
 
   # delete obsolete files
-  [ -e Dockerfile.${docker_arch} ] && rm Dockerfile.${docker_arch}
-  [ -e qemu/qemu-${qemu_arch}-static ] && rm qemu/qemu-${qemu_arch}-static
+  #[ -e Dockerfile.${docker_arch} ] && rm Dockerfile.${docker_arch}
+  #[ -e qemu/qemu-${qemu_arch}-static ] && rm qemu/qemu-${qemu_arch}-static
 
   popd
 done
