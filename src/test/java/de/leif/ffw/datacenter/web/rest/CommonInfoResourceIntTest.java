@@ -18,7 +18,9 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
@@ -72,6 +74,9 @@ public class CommonInfoResourceIntTest {
     @Autowired
     private ExceptionTranslator exceptionTranslator;
 
+    @Autowired
+    private EntityManager em;
+
     private MockMvc restCommonInfoMockMvc;
 
     private CommonInfo commonInfo;
@@ -93,7 +98,7 @@ public class CommonInfoResourceIntTest {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static CommonInfo createEntity() {
+    public static CommonInfo createEntity(EntityManager em) {
         CommonInfo commonInfo = new CommonInfo()
             .title(DEFAULT_TITLE)
             .description(DEFAULT_DESCRIPTION)
@@ -107,11 +112,11 @@ public class CommonInfoResourceIntTest {
 
     @Before
     public void initTest() {
-        commonInfoRepository.deleteAll();
-        commonInfo = createEntity();
+        commonInfo = createEntity(em);
     }
 
     @Test
+    @Transactional
     public void createCommonInfo() throws Exception {
         int databaseSizeBeforeCreate = commonInfoRepository.findAll().size();
 
@@ -135,11 +140,12 @@ public class CommonInfoResourceIntTest {
     }
 
     @Test
+    @Transactional
     public void createCommonInfoWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = commonInfoRepository.findAll().size();
 
         // Create the CommonInfo with an existing ID
-        commonInfo.setId("existing_id");
+        commonInfo.setId(1L);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restCommonInfoMockMvc.perform(post("/api/common-infos")
@@ -153,15 +159,16 @@ public class CommonInfoResourceIntTest {
     }
 
     @Test
+    @Transactional
     public void getAllCommonInfos() throws Exception {
         // Initialize the database
-        commonInfoRepository.save(commonInfo);
+        commonInfoRepository.saveAndFlush(commonInfo);
 
         // Get all the commonInfoList
         restCommonInfoMockMvc.perform(get("/api/common-infos?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(commonInfo.getId())))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(commonInfo.getId().intValue())))
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].showStartDate").value(hasItem(DEFAULT_SHOW_START_DATE.toString())))
@@ -172,15 +179,16 @@ public class CommonInfoResourceIntTest {
     }
     
     @Test
+    @Transactional
     public void getCommonInfo() throws Exception {
         // Initialize the database
-        commonInfoRepository.save(commonInfo);
+        commonInfoRepository.saveAndFlush(commonInfo);
 
         // Get the commonInfo
         restCommonInfoMockMvc.perform(get("/api/common-infos/{id}", commonInfo.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(commonInfo.getId()))
+            .andExpect(jsonPath("$.id").value(commonInfo.getId().intValue()))
             .andExpect(jsonPath("$.title").value(DEFAULT_TITLE.toString()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
             .andExpect(jsonPath("$.showStartDate").value(DEFAULT_SHOW_START_DATE.toString()))
@@ -191,6 +199,7 @@ public class CommonInfoResourceIntTest {
     }
 
     @Test
+    @Transactional
     public void getNonExistingCommonInfo() throws Exception {
         // Get the commonInfo
         restCommonInfoMockMvc.perform(get("/api/common-infos/{id}", Long.MAX_VALUE))
@@ -198,14 +207,17 @@ public class CommonInfoResourceIntTest {
     }
 
     @Test
+    @Transactional
     public void updateCommonInfo() throws Exception {
         // Initialize the database
-        commonInfoRepository.save(commonInfo);
+        commonInfoRepository.saveAndFlush(commonInfo);
 
         int databaseSizeBeforeUpdate = commonInfoRepository.findAll().size();
 
         // Update the commonInfo
         CommonInfo updatedCommonInfo = commonInfoRepository.findById(commonInfo.getId()).get();
+        // Disconnect from session so that the updates on updatedCommonInfo are not directly saved in db
+        em.detach(updatedCommonInfo);
         updatedCommonInfo
             .title(UPDATED_TITLE)
             .description(UPDATED_DESCRIPTION)
@@ -234,6 +246,7 @@ public class CommonInfoResourceIntTest {
     }
 
     @Test
+    @Transactional
     public void updateNonExistingCommonInfo() throws Exception {
         int databaseSizeBeforeUpdate = commonInfoRepository.findAll().size();
 
@@ -251,9 +264,10 @@ public class CommonInfoResourceIntTest {
     }
 
     @Test
+    @Transactional
     public void deleteCommonInfo() throws Exception {
         // Initialize the database
-        commonInfoRepository.save(commonInfo);
+        commonInfoRepository.saveAndFlush(commonInfo);
 
         int databaseSizeBeforeDelete = commonInfoRepository.findAll().size();
 
@@ -268,14 +282,15 @@ public class CommonInfoResourceIntTest {
     }
 
     @Test
+    @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(CommonInfo.class);
         CommonInfo commonInfo1 = new CommonInfo();
-        commonInfo1.setId("id1");
+        commonInfo1.setId(1L);
         CommonInfo commonInfo2 = new CommonInfo();
         commonInfo2.setId(commonInfo1.getId());
         assertThat(commonInfo1).isEqualTo(commonInfo2);
-        commonInfo2.setId("id2");
+        commonInfo2.setId(2L);
         assertThat(commonInfo1).isNotEqualTo(commonInfo2);
         commonInfo1.setId(null);
         assertThat(commonInfo1).isNotEqualTo(commonInfo2);

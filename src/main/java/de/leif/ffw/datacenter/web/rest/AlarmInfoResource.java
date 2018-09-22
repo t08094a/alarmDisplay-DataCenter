@@ -96,7 +96,7 @@ public class AlarmInfoResource {
      */
     @GetMapping("/alarm-infos/{id}")
     @Timed
-    public ResponseEntity<AlarmInfo> getAlarmInfo(@PathVariable String id) {
+    public ResponseEntity<AlarmInfo> getAlarmInfo(@PathVariable Long id) {
         log.debug("REST request to get AlarmInfo : {}", id);
         Optional<AlarmInfo> alarmInfo = alarmInfoRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(alarmInfo);
@@ -110,10 +110,10 @@ public class AlarmInfoResource {
      */
     @DeleteMapping("/alarm-infos/{id}")
     @Timed
-    public ResponseEntity<Void> deleteAlarmInfo(@PathVariable String id) {
+    public ResponseEntity<Void> deleteAlarmInfo(@PathVariable Long id) {
         log.debug("REST request to delete AlarmInfo : {}", id);
 
         alarmInfoRepository.deleteById(id);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id)).build();
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 }

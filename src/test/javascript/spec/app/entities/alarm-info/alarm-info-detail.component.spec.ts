@@ -11,7 +11,7 @@ describe('Component Tests', () => {
     describe('AlarmInfo Management Detail Component', () => {
         let comp: AlarmInfoDetailComponent;
         let fixture: ComponentFixture<AlarmInfoDetailComponent>;
-        const route = ({ data: of({ alarmInfo: new AlarmInfo('123') }) } as any) as ActivatedRoute;
+        const route = ({ data: of({ alarmInfo: new AlarmInfo(123) }) } as any) as ActivatedRoute;
 
         beforeEach(() => {
             TestBed.configureTestingModule({
@@ -33,7 +33,7 @@ describe('Component Tests', () => {
                 comp.ngOnInit();
 
                 // THEN
-                expect(comp.alarmInfo).toEqual(jasmine.objectContaining({ id: '123' }));
+                expect(comp.alarmInfo).toEqual(jasmine.objectContaining({ id: 123 }));
             });
         });
     });

@@ -1,8 +1,9 @@
 package de.leif.ffw.datacenter.domain;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -11,41 +12,44 @@ import java.util.Objects;
 /**
  * A CommonInfo.
  */
-@Document(collection = "common_info")
+@Entity
+@Table(name = "common_info")
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class CommonInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Field("title")
+    @Column(name = "title")
     private String title;
 
-    @Field("description")
+    @Column(name = "description")
     private String description;
 
-    @Field("show_start_date")
+    @Column(name = "show_start_date")
     private LocalDate showStartDate;
 
-    @Field("show_end_date")
+    @Column(name = "show_end_date")
     private LocalDate showEndDate;
 
-    @Field("alarm_relevant")
+    @Column(name = "alarm_relevant")
     private Boolean alarmRelevant;
 
-    @Field("alarm_relevant_start_date")
+    @Column(name = "alarm_relevant_start_date")
     private LocalDate alarmRelevantStartDate;
 
-    @Field("alarm_relevant_end_date")
+    @Column(name = "alarm_relevant_end_date")
     private LocalDate alarmRelevantEndDate;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

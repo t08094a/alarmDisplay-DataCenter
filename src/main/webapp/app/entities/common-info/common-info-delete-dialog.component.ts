@@ -20,7 +20,7 @@ export class CommonInfoDeleteDialogComponent {
         this.activeModal.dismiss('cancel');
     }
 
-    confirmDelete(id: string) {
+    confirmDelete(id: number) {
         this.commonInfoService.delete(id).subscribe(response => {
             this.eventManager.broadcast({
                 name: 'commonInfoListModification',

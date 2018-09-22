@@ -11,7 +11,7 @@ describe('Component Tests', () => {
     describe('CommonInfo Management Detail Component', () => {
         let comp: CommonInfoDetailComponent;
         let fixture: ComponentFixture<CommonInfoDetailComponent>;
-        const route = ({ data: of({ commonInfo: new CommonInfo('123') }) } as any) as ActivatedRoute;
+        const route = ({ data: of({ commonInfo: new CommonInfo(123) }) } as any) as ActivatedRoute;
 
         beforeEach(() => {
             TestBed.configureTestingModule({
@@ -33,7 +33,7 @@ describe('Component Tests', () => {
                 comp.ngOnInit();
 
                 // THEN
-                expect(comp.commonInfo).toEqual(jasmine.objectContaining({ id: '123' }));
+                expect(comp.commonInfo).toEqual(jasmine.objectContaining({ id: 123 }));
             });
         });
     });

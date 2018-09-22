@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { DataCenterSharedModule } from 'app/shared';
 
 import {
+    SessionsComponent,
     PasswordStrengthBarComponent,
     RegisterComponent,
     ActivateComponent,
@@ -23,6 +24,7 @@ import {
         PasswordStrengthBarComponent,
         PasswordResetInitComponent,
         PasswordResetFinishComponent,
+        SessionsComponent,
         SettingsComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]

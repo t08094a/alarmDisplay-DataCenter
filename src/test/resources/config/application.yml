@@ -13,23 +13,39 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-eureka:
-    client:
-        enabled: false
-    instance:
-        appname: dataCenter
-        instanceId: dataCenter:${spring.application.instance-id:${random.value}}
 
 spring:
     application:
         name: dataCenter
     cache:
         type: simple
-    data:
-        mongodb:
-            host: localhost
-            port: 0
-            database: dataCenter
+    datasource:
+        type: com.zaxxer.hikari.HikariDataSource
+        url: jdbc:h2:mem:dataCenter;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+        name:
+        username:
+        password:
+        hikari:
+            auto-commit: false
+    jpa:
+        database-platform: io.github.jhipster.domain.util.FixedH2Dialect
+        database: H2
+        open-in-view: false
+        show-sql: false
+        hibernate:
+            ddl-auto: none
+            naming:
+                physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+                implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+        properties:
+            hibernate.id.new_generator_mappings: true
+            hibernate.connection.provider_disables_autocommit: true
+            hibernate.cache.use_second_level_cache: false
+            hibernate.cache.use_query_cache: false
+            hibernate.generate_statistics: true
+            hibernate.hbm2ddl.auto: validate
+    liquibase:
+        contexts: test
     mail:
         host: localhost
     messages:
@@ -71,12 +87,9 @@ jhipster:
         from: test@localhost
         base-url: http://127.0.0.1:8080
     security:
-        authentication:
-            jwt:
-                # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
-                base64-secret: MWEzYzA0NzRjM2M2YzIwMTVkZDVhYjhjMDY2OGE2NGJkZmEwZDI3OTNiNWFjNzI2ZmRjMzA1NTM0ZjBjODM2ODFkNjQ0Y2Q1NmRiY2VlNmM4Nzc5M2I2OTRlMzdlMGMyZDVhYTE4MmU3MmZmZjJiMTIyNTMxMWI5NTNmNjJhMDc=
-                # Token is valid 24 hours
-                token-validity-in-seconds: 86400
+        remember-me:
+            # security key (this key should be unique for your application, and kept secret)
+            key: 48b743e812527646616ec1edd02aab8d4d4d5c0a46be97417f2f57aad99216303dadd4c868d029702dc58850fe314ff30da5
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
         logs: # Reports Dropwizard metrics in the logs

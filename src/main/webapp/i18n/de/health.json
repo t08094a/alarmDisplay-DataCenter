@@ -11,13 +11,9 @@
             "error": "Error"
         },
         "indicator": {
-            "discoveryComposite": "Discovery Composite",
-            "refreshScope": "Microservice Refresh Scope",
-            "configServer": "Microservice Config Server",
-            "hystrix": "Hystrix",
             "diskSpace": "Festplattenspeicher",
             "mail": "Email",
-            "mongo": "MongoDB"
+            "db": "Datenbank"
         },
         "table": {
             "service": "Dienst Name",

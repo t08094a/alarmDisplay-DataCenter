@@ -20,7 +20,7 @@ export class AlarmInfoDeleteDialogComponent {
         this.activeModal.dismiss('cancel');
     }
 
-    confirmDelete(id: string) {
+    confirmDelete(id: number) {
         this.alarmInfoService.delete(id).subscribe(response => {
             this.eventManager.broadcast({
                 name: 'alarmInfoListModification',

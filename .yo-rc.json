@@ -10,19 +10,19 @@
     "packageName": "de.leif.ffw.datacenter",
     "packageFolder": "de/leif/ffw/datacenter",
     "serverPort": "8080",
-    "authenticationType": "jwt",
+    "authenticationType": "session",
     "cacheProvider": "ehcache",
-    "enableHibernateCache": false,
+    "enableHibernateCache": true,
     "websocket": "spring-websocket",
-    "databaseType": "mongodb",
-    "devDatabaseType": "mongodb",
-    "prodDatabaseType": "mongodb",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Memory",
+    "prodDatabaseType": "mariadb",
     "searchEngine": false,
     "messageBroker": false,
-    "serviceDiscoveryType": "eureka",
+    "serviceDiscoveryType": false,
     "buildTool": "maven",
     "enableSwaggerCodegen": false,
-    "jwtSecretKey": "MWEzYzA0NzRjM2M2YzIwMTVkZDVhYjhjMDY2OGE2NGJkZmEwZDI3OTNiNWFjNzI2ZmRjMzA1NTM0ZjBjODM2ODFkNjQ0Y2Q1NmRiY2VlNmM4Nzc5M2I2OTRlMzdlMGMyZDVhYTE4MmU3MmZmZjJiMTIyNTMxMWI5NTNmNjJhMDc=",
+    "rememberMeKey": "48b743e812527646616ec1edd02aab8d4d4d5c0a46be97417f2f57aad99216303dadd4c868d029702dc58850fe314ff30da5",
     "clientFramework": "angularX",
     "useSass": true,
     "clientPackageManager": "npm",
@@ -32,10 +32,6 @@
     ],
     "jhiPrefix": "jhi",
     "otherModules": [
-      {
-        "name": "generator-jhipster-primeng",
-        "version": "2.0.66"
-      },
       {
         "name": "generator-jhipster-docker",
         "version": "2.5.0"

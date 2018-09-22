@@ -1,7 +1,7 @@
 import { Moment } from 'moment';
 
 export interface IAlarmInfo {
-    id?: string;
+    id?: number;
     time?: Moment;
     location?: string;
     geoposition?: string;
@@ -12,7 +12,7 @@ export interface IAlarmInfo {
 
 export class AlarmInfo implements IAlarmInfo {
     constructor(
-        public id?: string,
+        public id?: number,
         public time?: Moment,
         public location?: string,
         public geoposition?: string,

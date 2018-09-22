@@ -22,12 +22,12 @@ describe('Service Tests', () => {
 
         describe('Service methods', () => {
             it('should call correct URL', () => {
-                service.find('123').subscribe(() => {});
+                service.find(123).subscribe(() => {});
 
                 const req = httpMock.expectOne({ method: 'GET' });
 
                 const resourceUrl = SERVER_API_URL + 'api/alarm-infos';
-                expect(req.request.url).toEqual(resourceUrl + '/' + '123');
+                expect(req.request.url).toEqual(resourceUrl + '/' + 123);
             });
 
             it('should create a AlarmInfo', () => {
@@ -40,35 +40,35 @@ describe('Service Tests', () => {
             });
 
             it('should update a AlarmInfo', () => {
-                service.update(new AlarmInfo('123')).subscribe(received => {
-                    expect(received.body.id).toEqual('123');
+                service.update(new AlarmInfo(123)).subscribe(received => {
+                    expect(received.body.id).toEqual(123);
                 });
 
                 const req = httpMock.expectOne({ method: 'PUT' });
-                req.flush({ id: '123' });
+                req.flush({ id: 123 });
             });
 
             it('should return a AlarmInfo', () => {
-                service.find('123').subscribe(received => {
-                    expect(received.body.id).toEqual('123');
+                service.find(123).subscribe(received => {
+                    expect(received.body.id).toEqual(123);
                 });
 
                 const req = httpMock.expectOne({ method: 'GET' });
-                req.flush({ id: '123' });
+                req.flush({ id: 123 });
             });
 
             it('should return a list of AlarmInfo', () => {
                 service.query(null).subscribe(received => {
-                    expect(received.body[0].id).toEqual('123');
+                    expect(received.body[0].id).toEqual(123);
                 });
 
                 const req = httpMock.expectOne({ method: 'GET' });
-                req.flush([new AlarmInfo('123')]);
+                req.flush([new AlarmInfo(123)]);
             });
 
             it('should delete a AlarmInfo', () => {
-                service.delete('123').subscribe(received => {
-                    expect(received.url).toContain('/' + '123');
+                service.delete(123).subscribe(received => {
+                    expect(received.url).toContain('/' + 123);
                 });
 
                 const req = httpMock.expectOne({ method: 'DELETE' });
@@ -76,7 +76,7 @@ describe('Service Tests', () => {
             });
 
             it('should propagate not found response', () => {
-                service.find('123').subscribe(null, (_error: any) => {
+                service.find(123).subscribe(null, (_error: any) => {
                     expect(_error.status).toEqual(404);
                 });
 

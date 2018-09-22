@@ -1,7 +1,7 @@
 import { Moment } from 'moment';
 
 export interface ICommonInfo {
-    id?: string;
+    id?: number;
     title?: string;
     description?: string;
     showStartDate?: Moment;
@@ -13,7 +13,7 @@ export interface ICommonInfo {
 
 export class CommonInfo implements ICommonInfo {
     constructor(
-        public id?: string,
+        public id?: number,
         public title?: string,
         public description?: string,
         public showStartDate?: Moment,

@@ -96,7 +96,7 @@ public class CommonInfoResource {
      */
     @GetMapping("/common-infos/{id}")
     @Timed
-    public ResponseEntity<CommonInfo> getCommonInfo(@PathVariable String id) {
+    public ResponseEntity<CommonInfo> getCommonInfo(@PathVariable Long id) {
         log.debug("REST request to get CommonInfo : {}", id);
         Optional<CommonInfo> commonInfo = commonInfoRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(commonInfo);
@@ -110,10 +110,10 @@ public class CommonInfoResource {
      */
     @DeleteMapping("/common-infos/{id}")
     @Timed
-    public ResponseEntity<Void> deleteCommonInfo(@PathVariable String id) {
+    public ResponseEntity<Void> deleteCommonInfo(@PathVariable Long id) {
         log.debug("REST request to delete CommonInfo : {}", id);
 
         commonInfoRepository.deleteById(id);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id)).build();
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 }

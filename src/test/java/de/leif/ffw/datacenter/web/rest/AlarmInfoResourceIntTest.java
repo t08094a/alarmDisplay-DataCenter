@@ -18,7 +18,9 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -69,6 +71,9 @@ public class AlarmInfoResourceIntTest {
     @Autowired
     private ExceptionTranslator exceptionTranslator;
 
+    @Autowired
+    private EntityManager em;
+
     private MockMvc restAlarmInfoMockMvc;
 
     private AlarmInfo alarmInfo;
@@ -90,7 +95,7 @@ public class AlarmInfoResourceIntTest {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static AlarmInfo createEntity() {
+    public static AlarmInfo createEntity(EntityManager em) {
         AlarmInfo alarmInfo = new AlarmInfo()
             .time(DEFAULT_TIME)
             .location(DEFAULT_LOCATION)
@@ -103,11 +108,11 @@ public class AlarmInfoResourceIntTest {
 
     @Before
     public void initTest() {
-        alarmInfoRepository.deleteAll();
-        alarmInfo = createEntity();
+        alarmInfo = createEntity(em);
     }
 
     @Test
+    @Transactional
     public void createAlarmInfo() throws Exception {
         int databaseSizeBeforeCreate = alarmInfoRepository.findAll().size();
 
@@ -130,11 +135,12 @@ public class AlarmInfoResourceIntTest {
     }
 
     @Test
+    @Transactional
     public void createAlarmInfoWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = alarmInfoRepository.findAll().size();
 
         // Create the AlarmInfo with an existing ID
-        alarmInfo.setId("existing_id");
+        alarmInfo.setId(1L);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restAlarmInfoMockMvc.perform(post("/api/alarm-infos")
@@ -148,15 +154,16 @@ public class AlarmInfoResourceIntTest {
     }
 
     @Test
+    @Transactional
     public void getAllAlarmInfos() throws Exception {
         // Initialize the database
-        alarmInfoRepository.save(alarmInfo);
+        alarmInfoRepository.saveAndFlush(alarmInfo);
 
         // Get all the alarmInfoList
         restAlarmInfoMockMvc.perform(get("/api/alarm-infos?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(alarmInfo.getId())))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(alarmInfo.getId().intValue())))
             .andExpect(jsonPath("$.[*].time").value(hasItem(DEFAULT_TIME.toString())))
             .andExpect(jsonPath("$.[*].location").value(hasItem(DEFAULT_LOCATION.toString())))
             .andExpect(jsonPath("$.[*].geoposition").value(hasItem(DEFAULT_GEOPOSITION.toString())))
@@ -166,15 +173,16 @@ public class AlarmInfoResourceIntTest {
     }
     
     @Test
+    @Transactional
     public void getAlarmInfo() throws Exception {
         // Initialize the database
-        alarmInfoRepository.save(alarmInfo);
+        alarmInfoRepository.saveAndFlush(alarmInfo);
 
         // Get the alarmInfo
         restAlarmInfoMockMvc.perform(get("/api/alarm-infos/{id}", alarmInfo.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(alarmInfo.getId()))
+            .andExpect(jsonPath("$.id").value(alarmInfo.getId().intValue()))
             .andExpect(jsonPath("$.time").value(DEFAULT_TIME.toString()))
             .andExpect(jsonPath("$.location").value(DEFAULT_LOCATION.toString()))
             .andExpect(jsonPath("$.geoposition").value(DEFAULT_GEOPOSITION.toString()))
@@ -184,6 +192,7 @@ public class AlarmInfoResourceIntTest {
     }
 
     @Test
+    @Transactional
     public void getNonExistingAlarmInfo() throws Exception {
         // Get the alarmInfo
         restAlarmInfoMockMvc.perform(get("/api/alarm-infos/{id}", Long.MAX_VALUE))
@@ -191,14 +200,17 @@ public class AlarmInfoResourceIntTest {
     }
 
     @Test
+    @Transactional
     public void updateAlarmInfo() throws Exception {
         // Initialize the database
-        alarmInfoRepository.save(alarmInfo);
+        alarmInfoRepository.saveAndFlush(alarmInfo);
 
         int databaseSizeBeforeUpdate = alarmInfoRepository.findAll().size();
 
         // Update the alarmInfo
         AlarmInfo updatedAlarmInfo = alarmInfoRepository.findById(alarmInfo.getId()).get();
+        // Disconnect from session so that the updates on updatedAlarmInfo are not directly saved in db
+        em.detach(updatedAlarmInfo);
         updatedAlarmInfo
             .time(UPDATED_TIME)
             .location(UPDATED_LOCATION)
@@ -225,6 +237,7 @@ public class AlarmInfoResourceIntTest {
     }
 
     @Test
+    @Transactional
     public void updateNonExistingAlarmInfo() throws Exception {
         int databaseSizeBeforeUpdate = alarmInfoRepository.findAll().size();
 
@@ -242,9 +255,10 @@ public class AlarmInfoResourceIntTest {
     }
 
     @Test
+    @Transactional
     public void deleteAlarmInfo() throws Exception {
         // Initialize the database
-        alarmInfoRepository.save(alarmInfo);
+        alarmInfoRepository.saveAndFlush(alarmInfo);
 
         int databaseSizeBeforeDelete = alarmInfoRepository.findAll().size();
 
@@ -259,14 +273,15 @@ public class AlarmInfoResourceIntTest {
     }
 
     @Test
+    @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(AlarmInfo.class);
         AlarmInfo alarmInfo1 = new AlarmInfo();
-        alarmInfo1.setId("id1");
+        alarmInfo1.setId(1L);
         AlarmInfo alarmInfo2 = new AlarmInfo();
         alarmInfo2.setId(alarmInfo1.getId());
         assertThat(alarmInfo1).isEqualTo(alarmInfo2);
-        alarmInfo2.setId("id2");
+        alarmInfo2.setId(2L);
         assertThat(alarmInfo1).isNotEqualTo(alarmInfo2);
         alarmInfo1.setId(null);
         assertThat(alarmInfo1).isNotEqualTo(alarmInfo2);

@@ -32,7 +32,7 @@ describe('Component Tests', () => {
                 'Should call update service on save for existing entity',
                 fakeAsync(() => {
                     // GIVEN
-                    const entity = new CommonInfo('123');
+                    const entity = new CommonInfo(123);
                     spyOn(service, 'update').and.returnValue(of(new HttpResponse({ body: entity })));
                     comp.commonInfo = entity;
                     // WHEN

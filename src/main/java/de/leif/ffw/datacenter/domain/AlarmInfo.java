@@ -1,8 +1,9 @@
 package de.leif.ffw.datacenter.domain;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -11,38 +12,41 @@ import java.util.Objects;
 /**
  * A AlarmInfo.
  */
-@Document(collection = "alarm_info")
+@Entity
+@Table(name = "alarm_info")
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class AlarmInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Field("time")
+    @Column(name = "jhi_time")
     private Instant time;
 
-    @Field("location")
+    @Column(name = "location")
     private String location;
 
-    @Field("geoposition")
+    @Column(name = "geoposition")
     private String geoposition;
 
-    @Field("keywords")
+    @Column(name = "keywords")
     private String keywords;
 
-    @Field("comment")
+    @Column(name = "jhi_comment")
     private String comment;
 
-    @Field("priority")
+    @Column(name = "priority")
     private Integer priority;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
