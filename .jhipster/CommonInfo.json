@@ -1,6 +1,5 @@
 {
-    "fluentMethods": true,
-    "relationships": [],
+    "name": "CommonInfo",
     "fields": [
         {
             "fieldName": "title",
@@ -31,10 +30,14 @@
             "fieldType": "LocalDate"
         }
     ],
-    "changelogDate": "20180624191804",
+    "relationships": [],
+    "changelogDate": "20180921181544",
     "entityTableName": "common_info",
     "dto": "no",
     "pagination": "no",
     "service": "no",
-    "jpaMetamodelFiltering": false
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
 }

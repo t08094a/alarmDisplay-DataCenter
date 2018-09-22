@@ -37,7 +37,6 @@ You will only need to run this command when dependencies change in [package.json
 
 We use yarn scripts and [Webpack][] as our build system.
 
-
 Run the following commands in two separate terminals to create a blissful development experience where your browser
 auto-refreshes when files change on your hard drive.
 
@@ -60,13 +59,13 @@ Service workers are commented by default, to enable them please uncomment the fo
 <script>
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker
-        .register('./sw.js')
+        .register('./service-worker.js')
         .then(function() { console.log('Service Worker Registered'); });
     }
 </script>
 ```
 
-Note: workbox creates the respective service worker and dynamically generate the `sw.js`
+Note: workbox creates the respective service worker and dynamically generate the `service-worker.js`
 
 ### Managing dependencies
 
@@ -106,17 +105,6 @@ will generate few files:
     create src/main/webapp/app/my-component/my-component.component.ts
     update src/main/webapp/app/app.module.ts
 
-### Doing API-First development using swagger-codegen
-
-[Swagger-Codegen]() is configured for this application. You can generate API code from the `src/main/resources/swagger/api.yml` definition file by running:
-```bash
-./mvnw generate-sources
-```
-Then implements the generated interfaces with `@RestController` classes.
-
-To edit the `api.yml` definition file, you can use a tool such as [Swagger-Editor](). Start a local instance of the swagger-editor using docker by running: `docker-compose -f src/main/docker/swagger-editor.yml up -d`. The editor will then be reachable at [http://localhost:7742](http://localhost:7742).
-
-Refer to [Doing API-First development][] for more details.
 
 ## Building for production
 
@@ -141,13 +129,30 @@ To launch your application's tests, run:
 
 ### Client tests
 
-Unit tests are run by [Karma][] and written with [Jasmine][]. They're located in [src/test/javascript/](src/test/javascript/) and can be run with:
+Unit tests are run by [Jest][] and written with [Jasmine][]. They're located in [src/test/javascript/](src/test/javascript/) and can be run with:
 
     yarn test
 
-
+UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in [src/test/javascript/e2e](src/test/javascript/e2e)
+and can be run by starting Spring Boot in one terminal (`./mvnw spring-boot:run`) and running the tests (`npm run e2e`) in a second one.
 
 For more information, refer to the [Running tests page][].
+
+### Code quality
+
+Sonar is used to analyse code quality. You can start a local Sonar server (accessible on http://localhost:9001) with:
+
+```
+docker-compose -f src/main/docker/sonar.yml up -d
+```
+
+Then, run a Sonar analysis:
+
+```
+./mvnw -Pprod clean test sonar:sonar
+```
+
+For more information, refer to the [Code quality page][].
 
 ## Using Docker to simplify development (optional)
 
@@ -164,7 +169,7 @@ To stop it and remove the container, run:
 You can also fully dockerize your application and all the services that it depends on.
 To achieve this, first build a docker image of your app by running:
 
-    ./mvnw verify -Pprod dockerfile:build
+    ./mvnw verify -Pprod dockerfile:build dockerfile:tag@version dockerfile:tag@commit
 
 Then run:
 
@@ -176,14 +181,16 @@ For more information refer to [Using Docker and Docker-Compose][], this page als
 
 To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
 
-[JHipster Homepage and latest documentation]: http://www.jhipster.tech
-[JHipster 4.14.4 archive]: http://www.jhipster.tech/documentation-archive/v4.14.4
+[JHipster Homepage and latest documentation]: https://www.jhipster.tech
+[JHipster 5.3.4 archive]: https://www.jhipster.tech/documentation-archive/v5.3.4
 
-[Using JHipster in development]: http://www.jhipster.tech/documentation-archive/v4.14.4/development/
-[Using Docker and Docker-Compose]: http://www.jhipster.tech/documentation-archive/v4.14.4/docker-compose
-[Using JHipster in production]: http://www.jhipster.tech/documentation-archive/v4.14.4/production/
-[Running tests page]: http://www.jhipster.tech/documentation-archive/v4.14.4/running-tests/
-[Setting up Continuous Integration]: http://www.jhipster.tech/documentation-archive/v4.14.4/setting-up-ci/
+[Using JHipster in development]: https://www.jhipster.tech/documentation-archive/v5.3.4/development/
+[Service Discovery and Configuration with the JHipster-Registry]: https://www.jhipster.tech/documentation-archive/v5.3.4/microservices-architecture/#jhipster-registry
+[Using Docker and Docker-Compose]: https://www.jhipster.tech/documentation-archive/v5.3.4/docker-compose
+[Using JHipster in production]: https://www.jhipster.tech/documentation-archive/v5.3.4/production/
+[Running tests page]: https://www.jhipster.tech/documentation-archive/v5.3.4/running-tests/
+[Code quality page]: https://www.jhipster.tech/documentation-archive/v5.3.4/code-quality/
+[Setting up Continuous Integration]: https://www.jhipster.tech/documentation-archive/v5.3.4/setting-up-ci/
 
 
 [Node.js]: https://nodejs.org/
@@ -191,11 +198,8 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 [Webpack]: https://webpack.github.io/
 [Angular CLI]: https://cli.angular.io/
 [BrowserSync]: http://www.browsersync.io/
-[Karma]: http://karma-runner.github.io/
+[Jest]: https://facebook.github.io/jest/
 [Jasmine]: http://jasmine.github.io/2.0/introduction.html
 [Protractor]: https://angular.github.io/protractor/
 [Leaflet]: http://leafletjs.com/
 [DefinitelyTyped]: http://definitelytyped.org/
-[Swagger-Codegen]: https://github.com/swagger-api/swagger-codegen
-[Swagger-Editor]: http://editor.swagger.io
-[Doing API-First development]: http://www.jhipster.tech/documentation-archive/v4.14.4/doing-api-first-development/

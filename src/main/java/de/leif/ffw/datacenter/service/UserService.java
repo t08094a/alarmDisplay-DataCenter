@@ -1,15 +1,15 @@
 package de.leif.ffw.datacenter.service;
 
-import de.leif.ffw.datacenter.config.CacheConfiguration;
+import de.leif.ffw.datacenter.config.Constants;
 import de.leif.ffw.datacenter.domain.Authority;
 import de.leif.ffw.datacenter.domain.User;
 import de.leif.ffw.datacenter.repository.AuthorityRepository;
-import de.leif.ffw.datacenter.config.Constants;
 import de.leif.ffw.datacenter.repository.UserRepository;
 import de.leif.ffw.datacenter.security.AuthoritiesConstants;
 import de.leif.ffw.datacenter.security.SecurityUtils;
-import de.leif.ffw.datacenter.service.util.RandomUtil;
 import de.leif.ffw.datacenter.service.dto.UserDTO;
+import de.leif.ffw.datacenter.service.util.RandomUtil;
+import de.leif.ffw.datacenter.web.rest.errors.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,27 +56,24 @@ public class UserService {
                 user.setActivated(true);
                 user.setActivationKey(null);
                 userRepository.save(user);
-                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
-                cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
+                this.clearUserCaches(user);
                 log.debug("Activated user: {}", user);
                 return user;
             });
     }
 
     public Optional<User> completePasswordReset(String newPassword, String key) {
-       log.debug("Reset user password for reset key {}", key);
-
-       return userRepository.findOneByResetKey(key)
-           .filter(user -> user.getResetDate().isAfter(Instant.now().minusSeconds(86400)))
-           .map(user -> {
+        log.debug("Reset user password for reset key {}", key);
+        return userRepository.findOneByResetKey(key)
+            .filter(user -> user.getResetDate().isAfter(Instant.now().minusSeconds(86400)))
+            .map(user -> {
                 user.setPassword(passwordEncoder.encode(newPassword));
                 user.setResetKey(null);
                 user.setResetDate(null);
                 userRepository.save(user);
-                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
-                cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
+                this.clearUserCaches(user);
                 return user;
-           });
+            });
     }
 
     public Optional<User> requestPasswordReset(String mail) {
@@ -86,65 +83,82 @@ public class UserService {
                 user.setResetKey(RandomUtil.generateResetKey());
                 user.setResetDate(Instant.now());
                 userRepository.save(user);
-                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
-                cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
+                this.clearUserCaches(user);
                 return user;
             });
     }
 
     public User registerUser(UserDTO userDTO, String password) {
-
+        userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
+            boolean removed = removeNonActivatedUser(existingUser);
+            if (!removed) {
+                throw new LoginAlreadyUsedException();
+            }
+        });
+        userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).ifPresent(existingUser -> {
+            boolean removed = removeNonActivatedUser(existingUser);
+            if (!removed) {
+                throw new EmailAlreadyUsedException();
+            }
+        });
         User newUser = new User();
-        Authority authority = authorityRepository.findOne(AuthoritiesConstants.USER);
-        Set<Authority> authorities = new HashSet<>();
         String encryptedPassword = passwordEncoder.encode(password);
-        newUser.setLogin(userDTO.getLogin());
+        newUser.setLogin(userDTO.getLogin().toLowerCase());
         // new user gets initially a generated password
         newUser.setPassword(encryptedPassword);
         newUser.setFirstName(userDTO.getFirstName());
         newUser.setLastName(userDTO.getLastName());
-        newUser.setEmail(userDTO.getEmail());
+        newUser.setEmail(userDTO.getEmail().toLowerCase());
         newUser.setImageUrl(userDTO.getImageUrl());
         newUser.setLangKey(userDTO.getLangKey());
         // new user is not active
         newUser.setActivated(false);
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
-        authorities.add(authority);
+        Set<Authority> authorities = new HashSet<>();
+        authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
-        cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(newUser.getLogin());
-        cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(newUser.getEmail());
+        this.clearUserCaches(newUser);
         log.debug("Created Information for User: {}", newUser);
         return newUser;
+    }
+    private boolean removeNonActivatedUser(User existingUser){
+        if(existingUser.getActivated()) {
+             return false;
+        }
+        userRepository.delete(existingUser);
+        this.clearUserCaches(existingUser);
+        return true;
     }
 
     public User createUser(UserDTO userDTO) {
         User user = new User();
-        user.setLogin(userDTO.getLogin());
+        user.setLogin(userDTO.getLogin().toLowerCase());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
-        user.setEmail(userDTO.getEmail());
+        user.setEmail(userDTO.getEmail().toLowerCase());
         user.setImageUrl(userDTO.getImageUrl());
         if (userDTO.getLangKey() == null) {
             user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
         } else {
             user.setLangKey(userDTO.getLangKey());
         }
-        if (userDTO.getAuthorities() != null) {
-            Set<Authority> authorities = userDTO.getAuthorities().stream()
-                .map(authorityRepository::findOne)
-                .collect(Collectors.toSet());
-            user.setAuthorities(authorities);
-        }
         String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
         user.setPassword(encryptedPassword);
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(Instant.now());
         user.setActivated(true);
+        if (userDTO.getAuthorities() != null) {
+            Set<Authority> authorities = userDTO.getAuthorities().stream()
+                .map(authorityRepository::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toSet());
+            user.setAuthorities(authorities);
+        }
         userRepository.save(user);
-        cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
-        cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
+        this.clearUserCaches(user);
         log.debug("Created Information for User: {}", user);
         return user;
     }
@@ -164,12 +178,11 @@ public class UserService {
             .ifPresent(user -> {
                 user.setFirstName(firstName);
                 user.setLastName(lastName);
-                user.setEmail(email);
+                user.setEmail(email.toLowerCase());
                 user.setLangKey(langKey);
                 user.setImageUrl(imageUrl);
                 userRepository.save(user);
-                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
-                cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
+                this.clearUserCaches(user);
                 log.debug("Changed Information for User: {}", user);
             });
     }
@@ -182,23 +195,27 @@ public class UserService {
      */
     public Optional<UserDTO> updateUser(UserDTO userDTO) {
         return Optional.of(userRepository
-            .findOne(userDTO.getId()))
+            .findById(userDTO.getId()))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
             .map(user -> {
-                user.setLogin(userDTO.getLogin());
+                this.clearUserCaches(user);
+                user.setLogin(userDTO.getLogin().toLowerCase());
                 user.setFirstName(userDTO.getFirstName());
                 user.setLastName(userDTO.getLastName());
-                user.setEmail(userDTO.getEmail());
+                user.setEmail(userDTO.getEmail().toLowerCase());
                 user.setImageUrl(userDTO.getImageUrl());
                 user.setActivated(userDTO.isActivated());
                 user.setLangKey(userDTO.getLangKey());
                 Set<Authority> managedAuthorities = user.getAuthorities();
                 managedAuthorities.clear();
                 userDTO.getAuthorities().stream()
-                    .map(authorityRepository::findOne)
+                    .map(authorityRepository::findById)
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
                     .forEach(managedAuthorities::add);
                 userRepository.save(user);
-                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
-                cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
+                this.clearUserCaches(user);
                 log.debug("Changed Information for User: {}", user);
                 return user;
             })
@@ -208,21 +225,23 @@ public class UserService {
     public void deleteUser(String login) {
         userRepository.findOneByLogin(login).ifPresent(user -> {
             userRepository.delete(user);
-            cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
-            cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
+            this.clearUserCaches(user);
             log.debug("Deleted User: {}", user);
         });
     }
 
-    public void changePassword(String password) {
+    public void changePassword(String currentClearTextPassword, String newPassword) {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(user -> {
-                String encryptedPassword = passwordEncoder.encode(password);
+                String currentEncryptedPassword = user.getPassword();
+                if (!passwordEncoder.matches(currentClearTextPassword, currentEncryptedPassword)) {
+                    throw new InvalidPasswordException();
+                }
+                String encryptedPassword = passwordEncoder.encode(newPassword);
                 user.setPassword(encryptedPassword);
                 userRepository.save(user);
-                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
-                cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
+                this.clearUserCaches(user);
                 log.debug("Changed password for User: {}", user);
             });
     }
@@ -236,7 +255,7 @@ public class UserService {
     }
 
     public Optional<User> getUserWithAuthorities(String id) {
-        return Optional.ofNullable(userRepository.findOne(id));
+        return userRepository.findById(id);
     }
 
     public Optional<User> getUserWithAuthorities() {
@@ -250,13 +269,13 @@ public class UserService {
      */
     @Scheduled(cron = "0 0 1 * * ?")
     public void removeNotActivatedUsers() {
-        List<User> users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(Instant.now().minus(3, ChronoUnit.DAYS));
-        for (User user : users) {
-            log.debug("Deleting not activated user {}", user.getLogin());
-            userRepository.delete(user);
-            cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
-            cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
-        }
+        userRepository
+            .findAllByActivatedIsFalseAndCreatedDateBefore(Instant.now().minus(3, ChronoUnit.DAYS))
+            .forEach(user -> {
+                log.debug("Deleting not activated user {}", user.getLogin());
+                userRepository.delete(user);
+                this.clearUserCaches(user);
+            });
     }
 
     /**
@@ -266,4 +285,8 @@ public class UserService {
         return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());
     }
 
+    private void clearUserCaches(User user) {
+        Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(user.getLogin());
+        Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
+    }
 }

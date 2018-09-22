@@ -2,7 +2,6 @@ package de.leif.ffw.datacenter.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import de.leif.ffw.datacenter.domain.AlarmInfo;
-
 import de.leif.ffw.datacenter.repository.AlarmInfoRepository;
 import de.leif.ffw.datacenter.web.rest.errors.BadRequestAlertException;
 import de.leif.ffw.datacenter.web.rest.util.HeaderUtil;
@@ -69,7 +68,7 @@ public class AlarmInfoResource {
     public ResponseEntity<AlarmInfo> updateAlarmInfo(@RequestBody AlarmInfo alarmInfo) throws URISyntaxException {
         log.debug("REST request to update AlarmInfo : {}", alarmInfo);
         if (alarmInfo.getId() == null) {
-            return createAlarmInfo(alarmInfo);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         AlarmInfo result = alarmInfoRepository.save(alarmInfo);
         return ResponseEntity.ok()
@@ -87,7 +86,7 @@ public class AlarmInfoResource {
     public List<AlarmInfo> getAllAlarmInfos() {
         log.debug("REST request to get all AlarmInfos");
         return alarmInfoRepository.findAll();
-        }
+    }
 
     /**
      * GET  /alarm-infos/:id : get the "id" alarmInfo.
@@ -99,8 +98,8 @@ public class AlarmInfoResource {
     @Timed
     public ResponseEntity<AlarmInfo> getAlarmInfo(@PathVariable String id) {
         log.debug("REST request to get AlarmInfo : {}", id);
-        AlarmInfo alarmInfo = alarmInfoRepository.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(alarmInfo));
+        Optional<AlarmInfo> alarmInfo = alarmInfoRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(alarmInfo);
     }
 
     /**
@@ -113,7 +112,8 @@ public class AlarmInfoResource {
     @Timed
     public ResponseEntity<Void> deleteAlarmInfo(@PathVariable String id) {
         log.debug("REST request to delete AlarmInfo : {}", id);
-        alarmInfoRepository.delete(id);
+
+        alarmInfoRepository.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id)).build();
     }
 }

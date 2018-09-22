@@ -1,49 +1,29 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { DataCenterSharedModule } from '../../shared';
+import { DataCenterSharedModule } from 'app/shared';
 import {
-    CommonInfoService,
-    CommonInfoPopupService,
     CommonInfoComponent,
     CommonInfoDetailComponent,
-    CommonInfoDialogComponent,
-    CommonInfoPopupComponent,
+    CommonInfoUpdateComponent,
     CommonInfoDeletePopupComponent,
     CommonInfoDeleteDialogComponent,
     commonInfoRoute,
-    commonInfoPopupRoute,
+    commonInfoPopupRoute
 } from './';
 
-const ENTITY_STATES = [
-    ...commonInfoRoute,
-    ...commonInfoPopupRoute,
-];
+const ENTITY_STATES = [...commonInfoRoute, ...commonInfoPopupRoute];
 
 @NgModule({
-    imports: [
-        DataCenterSharedModule,
-        RouterModule.forChild(ENTITY_STATES)
-    ],
+    imports: [DataCenterSharedModule, RouterModule.forChild(ENTITY_STATES)],
     declarations: [
         CommonInfoComponent,
         CommonInfoDetailComponent,
-        CommonInfoDialogComponent,
+        CommonInfoUpdateComponent,
         CommonInfoDeleteDialogComponent,
-        CommonInfoPopupComponent,
-        CommonInfoDeletePopupComponent,
+        CommonInfoDeletePopupComponent
     ],
-    entryComponents: [
-        CommonInfoComponent,
-        CommonInfoDialogComponent,
-        CommonInfoPopupComponent,
-        CommonInfoDeleteDialogComponent,
-        CommonInfoDeletePopupComponent,
-    ],
-    providers: [
-        CommonInfoService,
-        CommonInfoPopupService,
-    ],
+    entryComponents: [CommonInfoComponent, CommonInfoUpdateComponent, CommonInfoDeleteDialogComponent, CommonInfoDeletePopupComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class DataCenterCommonInfoModule {}

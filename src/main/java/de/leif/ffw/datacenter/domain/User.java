@@ -4,7 +4,7 @@ import de.leif.ffw.datacenter.config.Constants;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.validator.constraints.Email;
+import javax.validation.constraints.Email;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -27,8 +27,6 @@ import java.time.Instant;
 public class User extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-
     @Id
     private String id;
 
@@ -52,7 +50,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private String lastName;
 
     @Email
-    @Size(min = 5, max = 100)
+    @Size(min = 5, max = 254)
     @Indexed
     private String email;
 

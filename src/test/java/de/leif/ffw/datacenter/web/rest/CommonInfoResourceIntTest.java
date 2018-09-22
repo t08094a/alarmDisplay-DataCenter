@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
 
+
 import static de.leif.ffw.datacenter.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -169,7 +170,7 @@ public class CommonInfoResourceIntTest {
             .andExpect(jsonPath("$.[*].alarmRelevantStartDate").value(hasItem(DEFAULT_ALARM_RELEVANT_START_DATE.toString())))
             .andExpect(jsonPath("$.[*].alarmRelevantEndDate").value(hasItem(DEFAULT_ALARM_RELEVANT_END_DATE.toString())));
     }
-
+    
     @Test
     public void getCommonInfo() throws Exception {
         // Initialize the database
@@ -200,10 +201,11 @@ public class CommonInfoResourceIntTest {
     public void updateCommonInfo() throws Exception {
         // Initialize the database
         commonInfoRepository.save(commonInfo);
+
         int databaseSizeBeforeUpdate = commonInfoRepository.findAll().size();
 
         // Update the commonInfo
-        CommonInfo updatedCommonInfo = commonInfoRepository.findOne(commonInfo.getId());
+        CommonInfo updatedCommonInfo = commonInfoRepository.findById(commonInfo.getId()).get();
         updatedCommonInfo
             .title(UPDATED_TITLE)
             .description(UPDATED_DESCRIPTION)
@@ -237,21 +239,22 @@ public class CommonInfoResourceIntTest {
 
         // Create the CommonInfo
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restCommonInfoMockMvc.perform(put("/api/common-infos")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(commonInfo)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the CommonInfo in the database
         List<CommonInfo> commonInfoList = commonInfoRepository.findAll();
-        assertThat(commonInfoList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(commonInfoList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
     public void deleteCommonInfo() throws Exception {
         // Initialize the database
         commonInfoRepository.save(commonInfo);
+
         int databaseSizeBeforeDelete = commonInfoRepository.findAll().size();
 
         // Get the commonInfo

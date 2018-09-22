@@ -2,7 +2,6 @@ package de.leif.ffw.datacenter.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import de.leif.ffw.datacenter.domain.CommonInfo;
-
 import de.leif.ffw.datacenter.repository.CommonInfoRepository;
 import de.leif.ffw.datacenter.web.rest.errors.BadRequestAlertException;
 import de.leif.ffw.datacenter.web.rest.util.HeaderUtil;
@@ -69,7 +68,7 @@ public class CommonInfoResource {
     public ResponseEntity<CommonInfo> updateCommonInfo(@RequestBody CommonInfo commonInfo) throws URISyntaxException {
         log.debug("REST request to update CommonInfo : {}", commonInfo);
         if (commonInfo.getId() == null) {
-            return createCommonInfo(commonInfo);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         CommonInfo result = commonInfoRepository.save(commonInfo);
         return ResponseEntity.ok()
@@ -87,7 +86,7 @@ public class CommonInfoResource {
     public List<CommonInfo> getAllCommonInfos() {
         log.debug("REST request to get all CommonInfos");
         return commonInfoRepository.findAll();
-        }
+    }
 
     /**
      * GET  /common-infos/:id : get the "id" commonInfo.
@@ -99,8 +98,8 @@ public class CommonInfoResource {
     @Timed
     public ResponseEntity<CommonInfo> getCommonInfo(@PathVariable String id) {
         log.debug("REST request to get CommonInfo : {}", id);
-        CommonInfo commonInfo = commonInfoRepository.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(commonInfo));
+        Optional<CommonInfo> commonInfo = commonInfoRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(commonInfo);
     }
 
     /**
@@ -113,7 +112,8 @@ public class CommonInfoResource {
     @Timed
     public ResponseEntity<Void> deleteCommonInfo(@PathVariable String id) {
         log.debug("REST request to delete CommonInfo : {}", id);
-        commonInfoRepository.delete(id);
+
+        commonInfoRepository.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id)).build();
     }
 }

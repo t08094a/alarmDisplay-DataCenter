@@ -23,6 +23,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+
 import static de.leif.ffw.datacenter.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -163,7 +164,7 @@ public class AlarmInfoResourceIntTest {
             .andExpect(jsonPath("$.[*].comment").value(hasItem(DEFAULT_COMMENT.toString())))
             .andExpect(jsonPath("$.[*].priority").value(hasItem(DEFAULT_PRIORITY)));
     }
-
+    
     @Test
     public void getAlarmInfo() throws Exception {
         // Initialize the database
@@ -193,10 +194,11 @@ public class AlarmInfoResourceIntTest {
     public void updateAlarmInfo() throws Exception {
         // Initialize the database
         alarmInfoRepository.save(alarmInfo);
+
         int databaseSizeBeforeUpdate = alarmInfoRepository.findAll().size();
 
         // Update the alarmInfo
-        AlarmInfo updatedAlarmInfo = alarmInfoRepository.findOne(alarmInfo.getId());
+        AlarmInfo updatedAlarmInfo = alarmInfoRepository.findById(alarmInfo.getId()).get();
         updatedAlarmInfo
             .time(UPDATED_TIME)
             .location(UPDATED_LOCATION)
@@ -228,21 +230,22 @@ public class AlarmInfoResourceIntTest {
 
         // Create the AlarmInfo
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restAlarmInfoMockMvc.perform(put("/api/alarm-infos")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(alarmInfo)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the AlarmInfo in the database
         List<AlarmInfo> alarmInfoList = alarmInfoRepository.findAll();
-        assertThat(alarmInfoList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(alarmInfoList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
     public void deleteAlarmInfo() throws Exception {
         // Initialize the database
         alarmInfoRepository.save(alarmInfo);
+
         int databaseSizeBeforeDelete = alarmInfoRepository.findAll().size();
 
         // Get the alarmInfo

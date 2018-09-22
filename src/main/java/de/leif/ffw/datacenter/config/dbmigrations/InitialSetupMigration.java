@@ -9,8 +9,6 @@ import com.github.mongobee.changeset.ChangeSet;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.time.Instant;
-import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * Creates the initial database setup
@@ -22,15 +20,9 @@ public class InitialSetupMigration {
     public void addAuthorities(MongoTemplate mongoTemplate) {
         Authority adminAuthority = new Authority();
         adminAuthority.setName(AuthoritiesConstants.ADMIN);
-
-        Authority roleManagerAuthority = new Authority();
-        roleManagerAuthority.setName(AuthoritiesConstants.MANAGER);
-
         Authority userAuthority = new Authority();
         userAuthority.setName(AuthoritiesConstants.USER);
-
         mongoTemplate.save(adminAuthority);
-        mongoTemplate.save(roleManagerAuthority);
         mongoTemplate.save(userAuthority);
     }
 
@@ -38,10 +30,6 @@ public class InitialSetupMigration {
     public void addUsers(MongoTemplate mongoTemplate) {
         Authority adminAuthority = new Authority();
         adminAuthority.setName(AuthoritiesConstants.ADMIN);
-
-        Authority roleManagerAuthority = new Authority();
-        roleManagerAuthority.setName(AuthoritiesConstants.MANAGER);
-
         Authority userAuthority = new Authority();
         userAuthority.setName(AuthoritiesConstants.USER);
 
@@ -57,7 +45,6 @@ public class InitialSetupMigration {
         systemUser.setCreatedBy(systemUser.getLogin());
         systemUser.setCreatedDate(Instant.now());
         systemUser.getAuthorities().add(adminAuthority);
-        systemUser.getAuthorities().add(roleManagerAuthority);
         systemUser.getAuthorities().add(userAuthority);
         mongoTemplate.save(systemUser);
 
@@ -86,7 +73,6 @@ public class InitialSetupMigration {
         adminUser.setCreatedBy(systemUser.getLogin());
         adminUser.setCreatedDate(Instant.now());
         adminUser.getAuthorities().add(adminAuthority);
-        adminUser.getAuthorities().add(roleManagerAuthority);
         adminUser.getAuthorities().add(userAuthority);
         mongoTemplate.save(adminUser);
 

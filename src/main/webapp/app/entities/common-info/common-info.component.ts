@@ -1,18 +1,18 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Subscription } from 'rxjs/Subscription';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { Subscription } from 'rxjs';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 
-import { CommonInfo } from './common-info.model';
+import { ICommonInfo } from 'app/shared/model/common-info.model';
+import { Principal } from 'app/core';
 import { CommonInfoService } from './common-info.service';
-import { Principal } from '../../shared';
 
 @Component({
     selector: 'jhi-common-info',
     templateUrl: './common-info.component.html'
 })
 export class CommonInfoComponent implements OnInit, OnDestroy {
-commonInfos: CommonInfo[];
+    commonInfos: ICommonInfo[];
     currentAccount: any;
     eventSubscriber: Subscription;
 
@@ -21,20 +21,20 @@ commonInfos: CommonInfo[];
         private jhiAlertService: JhiAlertService,
         private eventManager: JhiEventManager,
         private principal: Principal
-    ) {
-    }
+    ) {}
 
     loadAll() {
         this.commonInfoService.query().subscribe(
-            (res: HttpResponse<CommonInfo[]>) => {
+            (res: HttpResponse<ICommonInfo[]>) => {
                 this.commonInfos = res.body;
             },
             (res: HttpErrorResponse) => this.onError(res.message)
         );
     }
+
     ngOnInit() {
         this.loadAll();
-        this.principal.identity().then((account) => {
+        this.principal.identity().then(account => {
             this.currentAccount = account;
         });
         this.registerChangeInCommonInfos();
@@ -44,14 +44,15 @@ commonInfos: CommonInfo[];
         this.eventManager.destroy(this.eventSubscriber);
     }
 
-    trackId(index: number, item: CommonInfo) {
+    trackId(index: number, item: ICommonInfo) {
         return item.id;
     }
+
     registerChangeInCommonInfos() {
-        this.eventSubscriber = this.eventManager.subscribe('commonInfoListModification', (response) => this.loadAll());
+        this.eventSubscriber = this.eventManager.subscribe('commonInfoListModification', response => this.loadAll());
     }
 
-    private onError(error) {
-        this.jhiAlertService.error(error.message, null, null);
+    private onError(errorMessage: string) {
+        this.jhiAlertService.error(errorMessage, null, null);
     }
 }

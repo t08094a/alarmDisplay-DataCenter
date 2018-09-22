@@ -1,11 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { AlarmInfo } from './alarm-info.model';
-import { AlarmInfoPopupService } from './alarm-info-popup.service';
+import { IAlarmInfo } from 'app/shared/model/alarm-info.model';
 import { AlarmInfoService } from './alarm-info.service';
 
 @Component({
@@ -13,22 +12,16 @@ import { AlarmInfoService } from './alarm-info.service';
     templateUrl: './alarm-info-delete-dialog.component.html'
 })
 export class AlarmInfoDeleteDialogComponent {
+    alarmInfo: IAlarmInfo;
 
-    alarmInfo: AlarmInfo;
-
-    constructor(
-        private alarmInfoService: AlarmInfoService,
-        public activeModal: NgbActiveModal,
-        private eventManager: JhiEventManager
-    ) {
-    }
+    constructor(private alarmInfoService: AlarmInfoService, public activeModal: NgbActiveModal, private eventManager: JhiEventManager) {}
 
     clear() {
         this.activeModal.dismiss('cancel');
     }
 
     confirmDelete(id: string) {
-        this.alarmInfoService.delete(id).subscribe((response) => {
+        this.alarmInfoService.delete(id).subscribe(response => {
             this.eventManager.broadcast({
                 name: 'alarmInfoListModification',
                 content: 'Deleted an alarmInfo'
@@ -43,22 +36,30 @@ export class AlarmInfoDeleteDialogComponent {
     template: ''
 })
 export class AlarmInfoDeletePopupComponent implements OnInit, OnDestroy {
+    private ngbModalRef: NgbModalRef;
 
-    routeSub: any;
-
-    constructor(
-        private route: ActivatedRoute,
-        private alarmInfoPopupService: AlarmInfoPopupService
-    ) {}
+    constructor(private activatedRoute: ActivatedRoute, private router: Router, private modalService: NgbModal) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe((params) => {
-            this.alarmInfoPopupService
-                .open(AlarmInfoDeleteDialogComponent as Component, params['id']);
+        this.activatedRoute.data.subscribe(({ alarmInfo }) => {
+            setTimeout(() => {
+                this.ngbModalRef = this.modalService.open(AlarmInfoDeleteDialogComponent as Component, { size: 'lg', backdrop: 'static' });
+                this.ngbModalRef.componentInstance.alarmInfo = alarmInfo;
+                this.ngbModalRef.result.then(
+                    result => {
+                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.ngbModalRef = null;
+                    },
+                    reason => {
+                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.ngbModalRef = null;
+                    }
+                );
+            }, 0);
         });
     }
 
     ngOnDestroy() {
-        this.routeSub.unsubscribe();
+        this.ngbModalRef = null;
     }
 }

@@ -2,6 +2,7 @@ package de.leif.ffw.datacenter.security;
 
 import de.leif.ffw.datacenter.domain.User;
 import de.leif.ffw.datacenter.repository.UserRepository;
+import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,14 +32,18 @@ public class DomainUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(final String login) {
         log.debug("Authenticating {}", login);
+
+        if (new EmailValidator().isValid(login, null)) {
+            return userRepository.findOneByEmailIgnoreCase(login)
+                .map(user -> createSpringSecurityUser(login, user))
+                .orElseThrow(() -> new UsernameNotFoundException("User with email " + login + " was not found in the database"));
+        }
+
         String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);
-        Optional<User> userByEmailFromDatabase = userRepository.findOneByEmailIgnoreCase(lowercaseLogin);
-        return userByEmailFromDatabase.map(user -> createSpringSecurityUser(lowercaseLogin, user)).orElseGet(() -> {
-            Optional<User> userByLoginFromDatabase = userRepository.findOneByLogin(lowercaseLogin);
-            return userByLoginFromDatabase.map(user -> createSpringSecurityUser(lowercaseLogin, user))
-                .orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the " +
-                    "database"));
-        });
+        return userRepository.findOneByLogin(lowercaseLogin)
+            .map(user -> createSpringSecurityUser(lowercaseLogin, user))
+            .orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database"));
+
     }
 
     private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, User user) {

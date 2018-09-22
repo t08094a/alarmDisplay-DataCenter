@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Test class for the UserResource REST controller.
@@ -144,15 +145,17 @@ public class UserServiceIntTest {
         if (!userRepository.findOneByLogin(Constants.ANONYMOUS_USER).isPresent()) {
             userRepository.save(user);
         }
-        final PageRequest pageable = new PageRequest(0, (int) userRepository.count());
+        final PageRequest pageable = PageRequest.of(0, (int) userRepository.count());
         final Page<UserDTO> allManagedUsers = userService.getAllManagedUsers(pageable);
         assertThat(allManagedUsers.getContent().stream()
             .noneMatch(user -> Constants.ANONYMOUS_USER.equals(user.getLogin())))
             .isTrue();
     }
 
+
     @Test
     public void testRemoveNotActivatedUsers() {
+
         user.setActivated(false);
         userRepository.save(user);
         // Let the audit first set the creation date but then update it

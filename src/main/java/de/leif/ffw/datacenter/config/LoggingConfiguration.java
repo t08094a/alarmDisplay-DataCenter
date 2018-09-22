@@ -21,9 +21,11 @@ import net.logstash.logback.stacktrace.ShortenedThrowableConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@RefreshScope
 public class LoggingConfiguration {
 
     private static final String LOGSTASH_APPENDER_NAME = "LOGSTASH";
@@ -69,11 +71,11 @@ public class LoggingConfiguration {
         String customFields = "{\"app_name\":\"" + appName + "\",\"app_port\":\"" + serverPort + "\"}";
 
         // More documentation is available at: https://github.com/logstash/logstash-logback-encoder
-        LogstashEncoder logstashEncoder=new LogstashEncoder();
+        LogstashEncoder logstashEncoder = new LogstashEncoder();
         // Set the Logstash appender config from JHipster properties
         logstashEncoder.setCustomFields(customFields);
         // Set the Logstash appender config from JHipster properties
-        logstashAppender.addDestinations(new InetSocketAddress(jHipsterProperties.getLogging().getLogstash().getHost(),jHipsterProperties.getLogging().getLogstash().getPort()));
+        logstashAppender.addDestinations(new InetSocketAddress(jHipsterProperties.getLogging().getLogstash().getHost(), jHipsterProperties.getLogging().getLogstash().getPort()));
 
         ShortenedThrowableConverter throwableConverter = new ShortenedThrowableConverter();
         throwableConverter.setRootCauseFirst(true);

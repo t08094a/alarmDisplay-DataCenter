@@ -1,49 +1,29 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { DataCenterSharedModule } from '../../shared';
+import { DataCenterSharedModule } from 'app/shared';
 import {
-    AlarmInfoService,
-    AlarmInfoPopupService,
     AlarmInfoComponent,
     AlarmInfoDetailComponent,
-    AlarmInfoDialogComponent,
-    AlarmInfoPopupComponent,
+    AlarmInfoUpdateComponent,
     AlarmInfoDeletePopupComponent,
     AlarmInfoDeleteDialogComponent,
     alarmInfoRoute,
-    alarmInfoPopupRoute,
+    alarmInfoPopupRoute
 } from './';
 
-const ENTITY_STATES = [
-    ...alarmInfoRoute,
-    ...alarmInfoPopupRoute,
-];
+const ENTITY_STATES = [...alarmInfoRoute, ...alarmInfoPopupRoute];
 
 @NgModule({
-    imports: [
-        DataCenterSharedModule,
-        RouterModule.forChild(ENTITY_STATES)
-    ],
+    imports: [DataCenterSharedModule, RouterModule.forChild(ENTITY_STATES)],
     declarations: [
         AlarmInfoComponent,
         AlarmInfoDetailComponent,
-        AlarmInfoDialogComponent,
+        AlarmInfoUpdateComponent,
         AlarmInfoDeleteDialogComponent,
-        AlarmInfoPopupComponent,
-        AlarmInfoDeletePopupComponent,
+        AlarmInfoDeletePopupComponent
     ],
-    entryComponents: [
-        AlarmInfoComponent,
-        AlarmInfoDialogComponent,
-        AlarmInfoPopupComponent,
-        AlarmInfoDeleteDialogComponent,
-        AlarmInfoDeletePopupComponent,
-    ],
-    providers: [
-        AlarmInfoService,
-        AlarmInfoPopupService,
-    ],
+    entryComponents: [AlarmInfoComponent, AlarmInfoUpdateComponent, AlarmInfoDeleteDialogComponent, AlarmInfoDeletePopupComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class DataCenterAlarmInfoModule {}

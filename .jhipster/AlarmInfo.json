@@ -1,6 +1,5 @@
 {
-    "fluentMethods": true,
-    "relationships": [],
+    "name": "AlarmInfo",
     "fields": [
         {
             "fieldName": "time",
@@ -27,10 +26,14 @@
             "fieldType": "Integer"
         }
     ],
-    "changelogDate": "20180624191803",
+    "relationships": [],
+    "changelogDate": "20180921181543",
     "entityTableName": "alarm_info",
     "dto": "no",
     "pagination": "no",
     "service": "no",
-    "jpaMetamodelFiltering": false
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
 }

@@ -1,24 +1,3 @@
-#########################
-## Architecture: __BASEIMAGE_ARCH__
-#########################
+FROM __BASEIMAGE_ARCH__/alpine:latest
 
-FROM __BASEIMAGE_ARCH__/openjdk:__OPENJDK_TAG__
-
-__CROSS_COPY qemu/qemu-__QEMU_ARCH__-static /usr/bin/
-
-WORKDIR /app
-
-ENV SPRING_OUTPUT_ANSI_ENABLED=ALWAYS \
-    JHIPSTER_SLEEP=0 \
-    JAVA_OPTS=""
-
-# copy sources to app directory
-COPY . .
-
-RUN mv *.war app.war && rm -rf qemu*
-
-CMD echo "The application will start in ${JHIPSTER_SLEEP}s..." && \
-    sleep ${JHIPSTER_SLEEP} && \
-    java ${JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom -jar /app/app.war
-
-EXPOSE 8080
+__CROSS_COPY ../../../qemu/qemu-__QEMU_ARCH__-static /usr/bin/

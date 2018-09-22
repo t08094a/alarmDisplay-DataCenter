@@ -1,16 +1,14 @@
 <div>
-    <h2>
+    <h2 id="page-heading">
         <span jhiTranslate="dataCenterApp.commonInfo.home.title">Common Infos</span>
-        <button class="btn btn-primary float-right jh-create-entity create-common-info" [routerLink]="['/', { outlets: { popup: ['common-info-new'] } }]">
-            <span class="fa fa-plus"></span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-common-info" [routerLink]="['/common-info/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
             <span  jhiTranslate="dataCenterApp.commonInfo.home.createLabel">
             Create new Common Info
             </span>
         </button>
     </h2>
     <jhi-alert></jhi-alert>
-    <div class="row">
-    </div>
     <br/>
     <div class="table-responsive" *ngIf="commonInfos">
         <table class="table table-striped">
@@ -29,9 +27,9 @@
             </thead>
             <tbody>
             <tr *ngFor="let commonInfo of commonInfos ;trackBy: trackId">
-                <td><a [routerLink]="['../common-info', commonInfo.id ]">{{commonInfo.id}}</a></td>
+                <td><a [routerLink]="['/common-info', commonInfo.id, 'view' ]">{{commonInfo.id}}</a></td>
                 <td>{{commonInfo.title}}</td>
-                <td [innerHTML]="commonInfo.description"></td>
+                <td>{{commonInfo.description}}</td>
                 <td>{{commonInfo.showStartDate | date:'mediumDate'}}</td>
                 <td>{{commonInfo.showEndDate | date:'mediumDate'}}</td>
                 <td>{{commonInfo.alarmRelevant}}</td>
@@ -40,17 +38,15 @@
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
-                                [routerLink]="['../common-info', commonInfo.id ]"
+                                [routerLink]="['/common-info', commonInfo.id, 'view' ]"
                                 class="btn btn-info btn-sm">
-                            <span class="fa fa-eye"></span>
+                            <fa-icon [icon]="'eye'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'common-info/'+ commonInfo.id + '/edit'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
+                                [routerLink]="['/common-info', commonInfo.id, 'edit']"
                                 class="btn btn-primary btn-sm">
-                            <span class="fa fa-pencil"></span>
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="submit"
@@ -58,7 +54,7 @@
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm">
-                            <span class="fa fa-remove"></span>
+                            <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
                         </button>
                     </div>
