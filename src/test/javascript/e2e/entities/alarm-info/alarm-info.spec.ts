@@ -40,16 +40,12 @@ describe('AlarmInfo e2e test', () => {
         await alarmInfoComponentsPage.clickOnCreateButton();
         await alarmInfoUpdatePage.setTimeInput('01/01/2001' + protractor.Key.TAB + '02:30AM');
         expect(await alarmInfoUpdatePage.getTimeInput()).to.contain('2001-01-01T02:30');
-        await alarmInfoUpdatePage.setLocationInput('location');
-        expect(await alarmInfoUpdatePage.getLocationInput()).to.eq('location');
-        await alarmInfoUpdatePage.setGeopositionInput('geoposition');
-        expect(await alarmInfoUpdatePage.getGeopositionInput()).to.eq('geoposition');
-        await alarmInfoUpdatePage.setKeywordsInput('keywords');
-        expect(await alarmInfoUpdatePage.getKeywordsInput()).to.eq('keywords');
-        await alarmInfoUpdatePage.setCommentInput('comment');
-        expect(await alarmInfoUpdatePage.getCommentInput()).to.eq('comment');
         await alarmInfoUpdatePage.setPriorityInput('5');
         expect(await alarmInfoUpdatePage.getPriorityInput()).to.eq('5');
+        await alarmInfoUpdatePage.setCommentInput('comment');
+        expect(await alarmInfoUpdatePage.getCommentInput()).to.eq('comment');
+        await alarmInfoUpdatePage.placeOfActionSelectLastOption();
+        await alarmInfoUpdatePage.keywordsSelectLastOption();
         await alarmInfoUpdatePage.save();
         expect(await alarmInfoUpdatePage.getSaveButton().isPresent()).to.be.false;
 

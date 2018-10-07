@@ -1,0 +1,36 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-resource-heading" jhiTranslate="dataCenterApp.resource.home.createOrEditLabel">Create or edit a Resource</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!resource.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="resource.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="dataCenterApp.resource.name" for="field_name">Name</label>
+                    <input type="text" class="form-control" name="name" id="field_name"
+                        [(ngModel)]="resource.name" />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="dataCenterApp.resource.alarmInfo" for="field_alarmInfo">Alarm Info</label>
+                    <select class="form-control" id="field_alarmInfo" name="alarmInfo" [(ngModel)]="resource.alarmInfo" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="alarmInfoOption.id === resource.alarmInfo?.id ? resource.alarmInfo : alarmInfoOption" *ngFor="let alarmInfoOption of alarminfos; trackBy: trackAlarmInfoById">{{alarmInfoOption.id}}</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,47 @@
+{
+    "name": "Keywords",
+    "fields": [
+        {
+            "fieldName": "keyword",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "emergencyKeyword",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "b",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "r",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "s",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "t",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "relationshipName": "alarmInfo",
+            "otherEntityName": "alarmInfo",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "keywords"
+        }
+    ],
+    "changelogDate": "20181007111526",
+    "entityTableName": "keywords",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

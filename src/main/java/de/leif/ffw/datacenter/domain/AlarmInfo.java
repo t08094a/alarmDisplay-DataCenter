@@ -1,12 +1,16 @@
 package de.leif.ffw.datacenter.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -23,23 +27,28 @@ public class AlarmInfo implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "jhi_time")
+    @NotNull
+    @Column(name = "jhi_time", nullable = false)
     private Instant time;
 
-    @Column(name = "location")
-    private String location;
-
-    @Column(name = "geoposition")
-    private String geoposition;
-
-    @Column(name = "keywords")
-    private String keywords;
+    @NotNull
+    @Column(name = "priority", nullable = false)
+    private Integer priority;
 
     @Column(name = "jhi_comment")
     private String comment;
 
-    @Column(name = "priority")
-    private Integer priority;
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(unique = true)
+    private PlaceOfAction placeOfAction;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(unique = true)
+    private Keywords keywords;
+
+    @OneToMany(mappedBy = "alarmInfo", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Resource> resources = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -63,43 +72,17 @@ public class AlarmInfo implements Serializable {
         this.time = time;
     }
 
-    public String getLocation() {
-        return location;
+    public Integer getPriority() {
+        return priority;
     }
 
-    public AlarmInfo location(String location) {
-        this.location = location;
+    public AlarmInfo priority(Integer priority) {
+        this.priority = priority;
         return this;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getGeoposition() {
-        return geoposition;
-    }
-
-    public AlarmInfo geoposition(String geoposition) {
-        this.geoposition = geoposition;
-        return this;
-    }
-
-    public void setGeoposition(String geoposition) {
-        this.geoposition = geoposition;
-    }
-
-    public String getKeywords() {
-        return keywords;
-    }
-
-    public AlarmInfo keywords(String keywords) {
-        this.keywords = keywords;
-        return this;
-    }
-
-    public void setKeywords(String keywords) {
-        this.keywords = keywords;
+    public void setPriority(Integer priority) {
+        this.priority = priority;
     }
 
     public String getComment() {
@@ -115,17 +98,55 @@ public class AlarmInfo implements Serializable {
         this.comment = comment;
     }
 
-    public Integer getPriority() {
-        return priority;
+    public PlaceOfAction getPlaceOfAction() {
+        return placeOfAction;
     }
 
-    public AlarmInfo priority(Integer priority) {
-        this.priority = priority;
+    public AlarmInfo placeOfAction(PlaceOfAction placeOfAction) {
+        this.placeOfAction = placeOfAction;
         return this;
     }
 
-    public void setPriority(Integer priority) {
-        this.priority = priority;
+    public void setPlaceOfAction(PlaceOfAction placeOfAction) {
+        this.placeOfAction = placeOfAction;
+    }
+
+    public Keywords getKeywords() {
+        return keywords;
+    }
+
+    public AlarmInfo keywords(Keywords keywords) {
+        this.keywords = keywords;
+        return this;
+    }
+
+    public void setKeywords(Keywords keywords) {
+        this.keywords = keywords;
+    }
+
+    public Set<Resource> getResources() {
+        return resources;
+    }
+
+    public AlarmInfo resources(Set<Resource> resources) {
+        this.resources = resources;
+        return this;
+    }
+
+    public AlarmInfo addResources(Resource resource) {
+        this.resources.add(resource);
+        resource.setAlarmInfo(this);
+        return this;
+    }
+
+    public AlarmInfo removeResources(Resource resource) {
+        this.resources.remove(resource);
+        resource.setAlarmInfo(null);
+        return this;
+    }
+
+    public void setResources(Set<Resource> resources) {
+        this.resources = resources;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -154,11 +175,8 @@ public class AlarmInfo implements Serializable {
         return "AlarmInfo{" +
             "id=" + getId() +
             ", time='" + getTime() + "'" +
-            ", location='" + getLocation() + "'" +
-            ", geoposition='" + getGeoposition() + "'" +
-            ", keywords='" + getKeywords() + "'" +
-            ", comment='" + getComment() + "'" +
             ", priority=" + getPriority() +
+            ", comment='" + getComment() + "'" +
             "}";
     }
 }

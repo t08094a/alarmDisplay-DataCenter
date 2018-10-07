@@ -16,11 +16,10 @@
             <tr>
             <th><span jhiTranslate="global.field.id">ID</span></th>
             <th><span jhiTranslate="dataCenterApp.alarmInfo.time">Time</span></th>
-            <th><span jhiTranslate="dataCenterApp.alarmInfo.location">Location</span></th>
-            <th><span jhiTranslate="dataCenterApp.alarmInfo.geoposition">Geoposition</span></th>
-            <th><span jhiTranslate="dataCenterApp.alarmInfo.keywords">Keywords</span></th>
-            <th><span jhiTranslate="dataCenterApp.alarmInfo.comment">Comment</span></th>
             <th><span jhiTranslate="dataCenterApp.alarmInfo.priority">Priority</span></th>
+            <th><span jhiTranslate="dataCenterApp.alarmInfo.comment">Comment</span></th>
+            <th><span jhiTranslate="dataCenterApp.alarmInfo.placeOfAction">Place Of Action</span></th>
+            <th><span jhiTranslate="dataCenterApp.alarmInfo.keywords">Keywords</span></th>
             <th></th>
             </tr>
             </thead>
@@ -28,11 +27,18 @@
             <tr *ngFor="let alarmInfo of alarmInfos ;trackBy: trackId">
                 <td><a [routerLink]="['/alarm-info', alarmInfo.id, 'view' ]">{{alarmInfo.id}}</a></td>
                 <td>{{alarmInfo.time | date:'medium'}}</td>
-                <td>{{alarmInfo.location}}</td>
-                <td>{{alarmInfo.geoposition}}</td>
-                <td>{{alarmInfo.keywords}}</td>
-                <td>{{alarmInfo.comment}}</td>
                 <td>{{alarmInfo.priority}}</td>
+                <td>{{alarmInfo.comment}}</td>
+                <td>
+                    <div *ngIf="alarmInfo.placeOfAction">
+                        <a [routerLink]="['../place-of-action', alarmInfo.placeOfAction?.id, 'view' ]" >{{alarmInfo.placeOfAction?.id}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="alarmInfo.keywords">
+                        <a [routerLink]="['../keywords', alarmInfo.keywords?.id, 'view' ]" >{{alarmInfo.keywords?.id}}</a>
+                    </div>
+                </td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"

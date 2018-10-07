@@ -1,0 +1,51 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-place-of-action-heading" jhiTranslate="dataCenterApp.placeOfAction.home.createOrEditLabel">Create or edit a Place Of Action</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!placeOfAction.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="placeOfAction.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="dataCenterApp.placeOfAction.street" for="field_street">Street</label>
+                    <input type="text" class="form-control" name="street" id="field_street"
+                        [(ngModel)]="placeOfAction.street" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="dataCenterApp.placeOfAction.houseNumber" for="field_houseNumber">House Number</label>
+                    <input type="text" class="form-control" name="houseNumber" id="field_houseNumber"
+                        [(ngModel)]="placeOfAction.houseNumber" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="dataCenterApp.placeOfAction.city" for="field_city">City</label>
+                    <input type="text" class="form-control" name="city" id="field_city"
+                        [(ngModel)]="placeOfAction.city" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="dataCenterApp.placeOfAction.addition" for="field_addition">Addition</label>
+                    <input type="text" class="form-control" name="addition" id="field_addition"
+                        [(ngModel)]="placeOfAction.addition" />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="dataCenterApp.placeOfAction.geoPosition" for="field_geoPosition">Geo Position</label>
+                    <select class="form-control" id="field_geoPosition" name="geoPosition" [(ngModel)]="placeOfAction.geoPosition">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="geoPositionOption.id === placeOfAction.geoPosition?.id ? placeOfAction.geoPosition : geoPositionOption" *ngFor="let geoPositionOption of geopositions; trackBy: trackGeoPositionById">{{geoPositionOption.id}}</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

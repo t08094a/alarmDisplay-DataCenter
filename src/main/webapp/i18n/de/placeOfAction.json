@@ -1,0 +1,27 @@
+
+{
+    "dataCenterApp": {
+        "placeOfAction" : {
+            "home": {
+                "title": "Einsatzort",
+                "createLabel": "Einsatzort erstellen",
+                "createOrEditLabel": "Einsatzort erstellen oder bearbeiten"
+            },
+            "created": "Einsatzort erstellt mit ID {{ param }}",
+            "updated": "Einsatzort aktualisiert mit ID {{ param }}",
+            "deleted": "Einsatzort gelöscht mit ID {{ param }}",
+            "delete": {
+                "question": "Soll der Einsatzort {{ id }} wirklich dauerhaft gelöscht werden?"
+            },
+            "detail": {
+                "title": "Einsatzort"
+            },
+            "street": "Straße",
+            "houseNumber": "Hausnummer",
+            "city": "Ort",
+            "addition": "Zusatz",
+            "geoPosition": "Geo Position",
+            "alarmInfo": "Alarm Info"
+        }
+    }
+}

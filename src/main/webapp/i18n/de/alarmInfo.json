@@ -17,11 +17,11 @@
                 "title": "Alarm Info"
             },
             "time": "Alarmzeit",
-            "location": "Zielort",
-            "geoposition": "Geo-Position",
+            "priority": "Priorität",
+            "comment": "Bemerkung",
+            "placeOfAction": "Zielort",
             "keywords": "Stichworte",
-            "comment": "Kommentar",
-            "priority": "Priorität"
+            "resources": "benötigte Ausstattung"
         }
     }
 }

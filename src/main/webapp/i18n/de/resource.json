@@ -1,0 +1,24 @@
+
+{
+    "dataCenterApp": {
+        "resource" : {
+            "home": {
+                "title": "Resourcen",
+                "createLabel": "Resource erstellen",
+                "createOrEditLabel": "Resource erstellen oder bearbeiten"
+            },
+            "created": "Resource erstellt mit ID {{ param }}",
+            "updated": "Resource aktualisiert mit ID {{ param }}",
+            "deleted": "Resource gelöscht mit ID {{ param }}",
+            "delete": {
+                "question": "Soll die Resource {{ id }} wirklich dauerhaft gelöscht werden?"
+            },
+            "detail": {
+                "title": "Resource"
+            },
+            "name": "Name",
+            "alarmInfo": "Alarm Info",
+            "equipments": "Ausstattung"
+        }
+    }
+}

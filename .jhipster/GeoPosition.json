@@ -1,0 +1,37 @@
+{
+    "name": "GeoPosition",
+    "fields": [
+        {
+            "fieldName": "x",
+            "fieldType": "Double",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "y",
+            "fieldType": "Double",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "relationshipName": "placeOfAction",
+            "otherEntityName": "placeOfAction",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "geoPosition"
+        }
+    ],
+    "changelogDate": "20181007092646",
+    "entityTableName": "geo_position",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -1,0 +1,32 @@
+{
+    "name": "Resource",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipName": "alarmInfo",
+            "otherEntityName": "alarmInfo",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "equipments",
+            "otherEntityName": "equipment",
+            "otherEntityRelationshipName": "resource"
+        }
+    ],
+    "changelogDate": "20181007111527",
+    "entityTableName": "resource",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

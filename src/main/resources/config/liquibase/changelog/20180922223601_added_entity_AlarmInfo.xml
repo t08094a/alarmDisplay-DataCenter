@@ -23,29 +23,21 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="jhi_time" type="datetime">
-                <constraints nullable="true" />
+                <constraints nullable="false" />
             </column>
 
-            <column name="location" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="geoposition" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="keywords" type="varchar(255)">
-                <constraints nullable="true" />
+            <column name="priority" type="integer">
+                <constraints nullable="false" />
             </column>
 
             <column name="jhi_comment" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-
-            <column name="priority" type="integer">
-                <constraints nullable="true" />
+            <column name="place_of_action_id" type="bigint">
+                <constraints unique="true" nullable="true" uniqueConstraintName="ux_alarm_info_place_of_action_id" />
+            </column>            <column name="keywords_id" type="bigint">
+                <constraints unique="true" nullable="true" uniqueConstraintName="ux_alarm_info_keywords_id" />
             </column>
-
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
         <dropDefaultValue tableName="alarm_info" columnName="jhi_time" columnDataType="datetime"/>

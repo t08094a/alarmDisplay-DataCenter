@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -43,7 +44,7 @@ public class AlarmInfoResource {
      */
     @PostMapping("/alarm-infos")
     @Timed
-    public ResponseEntity<AlarmInfo> createAlarmInfo(@RequestBody AlarmInfo alarmInfo) throws URISyntaxException {
+    public ResponseEntity<AlarmInfo> createAlarmInfo(@Valid @RequestBody AlarmInfo alarmInfo) throws URISyntaxException {
         log.debug("REST request to save AlarmInfo : {}", alarmInfo);
         if (alarmInfo.getId() != null) {
             throw new BadRequestAlertException("A new alarmInfo cannot already have an ID", ENTITY_NAME, "idexists");
@@ -65,7 +66,7 @@ public class AlarmInfoResource {
      */
     @PutMapping("/alarm-infos")
     @Timed
-    public ResponseEntity<AlarmInfo> updateAlarmInfo(@RequestBody AlarmInfo alarmInfo) throws URISyntaxException {
+    public ResponseEntity<AlarmInfo> updateAlarmInfo(@Valid @RequestBody AlarmInfo alarmInfo) throws URISyntaxException {
         log.debug("REST request to update AlarmInfo : {}", alarmInfo);
         if (alarmInfo.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");

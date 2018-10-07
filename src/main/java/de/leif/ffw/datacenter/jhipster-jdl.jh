@@ -1,10 +1,36 @@
 entity AlarmInfo {
-	time Instant,
-    location String,
-    geoposition String,
-    keywords String,
-    comment String,
-    priority Integer,
+	time Instant required,
+    priority Integer required,
+    comment String
+}
+
+entity PlaceOfAction {
+	street String,
+    houseNumber String,
+    city String,
+    addition String
+}
+
+entity GeoPosition {
+	x Double required,
+    y Double required
+}
+
+entity Keywords {
+	keyword String,
+    emergencyKeyword String,
+    b String,
+    r String,
+    s String,
+    t String
+}
+
+entity Resource {
+	name String,
+}
+
+entity Equipment {
+	name String
 }
 
 entity CommonInfo {
@@ -15,4 +41,15 @@ entity CommonInfo {
     alarmRelevant Boolean,
     alarmRelevantStartDate LocalDate,
     alarmRelevantEndDate LocalDate
+}
+
+relationship OneToOne {
+	AlarmInfo to PlaceOfAction,
+	PlaceOfAction to GeoPosition,
+    AlarmInfo to Keywords
+}
+
+relationship OneToMany {
+	AlarmInfo{resources} to Resource,
+    Resource{equipments} to Equipment
 }

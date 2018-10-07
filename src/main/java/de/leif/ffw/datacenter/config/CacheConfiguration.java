@@ -42,6 +42,16 @@ public class CacheConfiguration {
             cm.createCache(de.leif.ffw.datacenter.domain.User.class.getName() + ".persistentTokens", jcacheConfiguration);
             cm.createCache(de.leif.ffw.datacenter.domain.AlarmInfo.class.getName(), jcacheConfiguration);
             cm.createCache(de.leif.ffw.datacenter.domain.CommonInfo.class.getName(), jcacheConfiguration);
+            cm.createCache(de.leif.ffw.datacenter.domain.PlaceOfAction.class.getName(), jcacheConfiguration);
+            cm.createCache(de.leif.ffw.datacenter.domain.GeoPosition.class.getName(), jcacheConfiguration);
+            cm.createCache(de.leif.ffw.datacenter.domain.AlarmInfo.class.getName() + ".resources", jcacheConfiguration);
+            cm.createCache(de.leif.ffw.datacenter.domain.Keywords.class.getName(), jcacheConfiguration);
+            cm.createCache(de.leif.ffw.datacenter.domain.Resource.class.getName(), jcacheConfiguration);
+            cm.createCache(de.leif.ffw.datacenter.domain.Resource.class.getName() + ".equipment", jcacheConfiguration);
+            cm.createCache(de.leif.ffw.datacenter.domain.Equipment.class.getName(), jcacheConfiguration);
+            cm.createCache(de.leif.ffw.datacenter.domain.AlarmInfo.class.getName() + ".ids", jcacheConfiguration);
+            cm.createCache(de.leif.ffw.datacenter.domain.Resource.class.getName() + ".ids", jcacheConfiguration);
+            cm.createCache(de.leif.ffw.datacenter.domain.Resource.class.getName() + ".equipments", jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }

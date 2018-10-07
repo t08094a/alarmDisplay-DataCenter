@@ -1,0 +1,23 @@
+
+{
+    "dataCenterApp": {
+        "equipment" : {
+            "home": {
+                "title": "Ausstattung",
+                "createLabel": "Ausstattung erstellen",
+                "createOrEditLabel": "Neu Ausstattung erstellen oder bearbeiten"
+            },
+            "created": "Ausstattung erstellt mit ID {{ param }}",
+            "updated": "Ausstattung aktualisiert mit ID {{ param }}",
+            "deleted": "Ausstattung gelöscht mit ID {{ param }}",
+            "delete": {
+                "question": "Soll die Ausstattung {{ id }} wirklich dauerhaft gelöscht werden?"
+            },
+            "detail": {
+                "title": "Ausstattung"
+            },
+            "name": "Name",
+            "resource": "Resource"
+        }
+    }
+}

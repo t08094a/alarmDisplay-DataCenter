@@ -9,25 +9,25 @@
                 <dd>
                     <span>{{alarmInfo.time}}</span>
                 </dd>
-                <dt><span jhiTranslate="dataCenterApp.alarmInfo.location">Location</span></dt>
+                <dt><span jhiTranslate="dataCenterApp.alarmInfo.priority">Priority</span></dt>
                 <dd>
-                    <span>{{alarmInfo.location}}</span>
-                </dd>
-                <dt><span jhiTranslate="dataCenterApp.alarmInfo.geoposition">Geoposition</span></dt>
-                <dd>
-                    <span>{{alarmInfo.geoposition}}</span>
-                </dd>
-                <dt><span jhiTranslate="dataCenterApp.alarmInfo.keywords">Keywords</span></dt>
-                <dd>
-                    <span>{{alarmInfo.keywords}}</span>
+                    <span>{{alarmInfo.priority}}</span>
                 </dd>
                 <dt><span jhiTranslate="dataCenterApp.alarmInfo.comment">Comment</span></dt>
                 <dd>
                     <span>{{alarmInfo.comment}}</span>
                 </dd>
-                <dt><span jhiTranslate="dataCenterApp.alarmInfo.priority">Priority</span></dt>
+                <dt><span jhiTranslate="dataCenterApp.alarmInfo.placeOfAction">Place Of Action</span></dt>
                 <dd>
-                    <span>{{alarmInfo.priority}}</span>
+                    <div *ngIf="alarmInfo.placeOfAction">
+                        <a [routerLink]="['/place-of-action', alarmInfo.placeOfAction?.id, 'view']">{{alarmInfo.placeOfAction?.id}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="dataCenterApp.alarmInfo.keywords">Keywords</span></dt>
+                <dd>
+                    <div *ngIf="alarmInfo.keywords">
+                        <a [routerLink]="['/keywords', alarmInfo.keywords?.id, 'view']">{{alarmInfo.keywords?.id}}</a>
+                    </div>
                 </dd>
             </dl>
 

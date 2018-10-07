@@ -1,0 +1,54 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-keywords-heading" jhiTranslate="dataCenterApp.keywords.home.createOrEditLabel">Create or edit a Keywords</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!keywords.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="keywords.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="dataCenterApp.keywords.keyword" for="field_keyword">Keyword</label>
+                    <input type="text" class="form-control" name="keyword" id="field_keyword"
+                        [(ngModel)]="keywords.keyword" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="dataCenterApp.keywords.emergencyKeyword" for="field_emergencyKeyword">Emergency Keyword</label>
+                    <input type="text" class="form-control" name="emergencyKeyword" id="field_emergencyKeyword"
+                        [(ngModel)]="keywords.emergencyKeyword" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="dataCenterApp.keywords.b" for="field_b">B</label>
+                    <input type="text" class="form-control" name="b" id="field_b"
+                        [(ngModel)]="keywords.b" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="dataCenterApp.keywords.r" for="field_r">R</label>
+                    <input type="text" class="form-control" name="r" id="field_r"
+                        [(ngModel)]="keywords.r" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="dataCenterApp.keywords.s" for="field_s">S</label>
+                    <input type="text" class="form-control" name="s" id="field_s"
+                        [(ngModel)]="keywords.s" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="dataCenterApp.keywords.t" for="field_t">T</label>
+                    <input type="text" class="form-control" name="t" id="field_t"
+                        [(ngModel)]="keywords.t" />
+                </div>
+
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -44,20 +44,11 @@ public class AlarmInfoResourceIntTest {
     private static final Instant DEFAULT_TIME = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_TIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-    private static final String DEFAULT_LOCATION = "AAAAAAAAAA";
-    private static final String UPDATED_LOCATION = "BBBBBBBBBB";
-
-    private static final String DEFAULT_GEOPOSITION = "AAAAAAAAAA";
-    private static final String UPDATED_GEOPOSITION = "BBBBBBBBBB";
-
-    private static final String DEFAULT_KEYWORDS = "AAAAAAAAAA";
-    private static final String UPDATED_KEYWORDS = "BBBBBBBBBB";
+    private static final Integer DEFAULT_PRIORITY = 1;
+    private static final Integer UPDATED_PRIORITY = 2;
 
     private static final String DEFAULT_COMMENT = "AAAAAAAAAA";
     private static final String UPDATED_COMMENT = "BBBBBBBBBB";
-
-    private static final Integer DEFAULT_PRIORITY = 1;
-    private static final Integer UPDATED_PRIORITY = 2;
 
     @Autowired
     private AlarmInfoRepository alarmInfoRepository;
@@ -98,11 +89,8 @@ public class AlarmInfoResourceIntTest {
     public static AlarmInfo createEntity(EntityManager em) {
         AlarmInfo alarmInfo = new AlarmInfo()
             .time(DEFAULT_TIME)
-            .location(DEFAULT_LOCATION)
-            .geoposition(DEFAULT_GEOPOSITION)
-            .keywords(DEFAULT_KEYWORDS)
-            .comment(DEFAULT_COMMENT)
-            .priority(DEFAULT_PRIORITY);
+            .priority(DEFAULT_PRIORITY)
+            .comment(DEFAULT_COMMENT);
         return alarmInfo;
     }
 
@@ -127,11 +115,8 @@ public class AlarmInfoResourceIntTest {
         assertThat(alarmInfoList).hasSize(databaseSizeBeforeCreate + 1);
         AlarmInfo testAlarmInfo = alarmInfoList.get(alarmInfoList.size() - 1);
         assertThat(testAlarmInfo.getTime()).isEqualTo(DEFAULT_TIME);
-        assertThat(testAlarmInfo.getLocation()).isEqualTo(DEFAULT_LOCATION);
-        assertThat(testAlarmInfo.getGeoposition()).isEqualTo(DEFAULT_GEOPOSITION);
-        assertThat(testAlarmInfo.getKeywords()).isEqualTo(DEFAULT_KEYWORDS);
-        assertThat(testAlarmInfo.getComment()).isEqualTo(DEFAULT_COMMENT);
         assertThat(testAlarmInfo.getPriority()).isEqualTo(DEFAULT_PRIORITY);
+        assertThat(testAlarmInfo.getComment()).isEqualTo(DEFAULT_COMMENT);
     }
 
     @Test
@@ -155,6 +140,42 @@ public class AlarmInfoResourceIntTest {
 
     @Test
     @Transactional
+    public void checkTimeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = alarmInfoRepository.findAll().size();
+        // set the field null
+        alarmInfo.setTime(null);
+
+        // Create the AlarmInfo, which fails.
+
+        restAlarmInfoMockMvc.perform(post("/api/alarm-infos")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(alarmInfo)))
+            .andExpect(status().isBadRequest());
+
+        List<AlarmInfo> alarmInfoList = alarmInfoRepository.findAll();
+        assertThat(alarmInfoList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkPriorityIsRequired() throws Exception {
+        int databaseSizeBeforeTest = alarmInfoRepository.findAll().size();
+        // set the field null
+        alarmInfo.setPriority(null);
+
+        // Create the AlarmInfo, which fails.
+
+        restAlarmInfoMockMvc.perform(post("/api/alarm-infos")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(alarmInfo)))
+            .andExpect(status().isBadRequest());
+
+        List<AlarmInfo> alarmInfoList = alarmInfoRepository.findAll();
+        assertThat(alarmInfoList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllAlarmInfos() throws Exception {
         // Initialize the database
         alarmInfoRepository.saveAndFlush(alarmInfo);
@@ -165,11 +186,8 @@ public class AlarmInfoResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(alarmInfo.getId().intValue())))
             .andExpect(jsonPath("$.[*].time").value(hasItem(DEFAULT_TIME.toString())))
-            .andExpect(jsonPath("$.[*].location").value(hasItem(DEFAULT_LOCATION.toString())))
-            .andExpect(jsonPath("$.[*].geoposition").value(hasItem(DEFAULT_GEOPOSITION.toString())))
-            .andExpect(jsonPath("$.[*].keywords").value(hasItem(DEFAULT_KEYWORDS.toString())))
-            .andExpect(jsonPath("$.[*].comment").value(hasItem(DEFAULT_COMMENT.toString())))
-            .andExpect(jsonPath("$.[*].priority").value(hasItem(DEFAULT_PRIORITY)));
+            .andExpect(jsonPath("$.[*].priority").value(hasItem(DEFAULT_PRIORITY)))
+            .andExpect(jsonPath("$.[*].comment").value(hasItem(DEFAULT_COMMENT.toString())));
     }
     
     @Test
@@ -184,11 +202,8 @@ public class AlarmInfoResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(alarmInfo.getId().intValue()))
             .andExpect(jsonPath("$.time").value(DEFAULT_TIME.toString()))
-            .andExpect(jsonPath("$.location").value(DEFAULT_LOCATION.toString()))
-            .andExpect(jsonPath("$.geoposition").value(DEFAULT_GEOPOSITION.toString()))
-            .andExpect(jsonPath("$.keywords").value(DEFAULT_KEYWORDS.toString()))
-            .andExpect(jsonPath("$.comment").value(DEFAULT_COMMENT.toString()))
-            .andExpect(jsonPath("$.priority").value(DEFAULT_PRIORITY));
+            .andExpect(jsonPath("$.priority").value(DEFAULT_PRIORITY))
+            .andExpect(jsonPath("$.comment").value(DEFAULT_COMMENT.toString()));
     }
 
     @Test
@@ -213,11 +228,8 @@ public class AlarmInfoResourceIntTest {
         em.detach(updatedAlarmInfo);
         updatedAlarmInfo
             .time(UPDATED_TIME)
-            .location(UPDATED_LOCATION)
-            .geoposition(UPDATED_GEOPOSITION)
-            .keywords(UPDATED_KEYWORDS)
-            .comment(UPDATED_COMMENT)
-            .priority(UPDATED_PRIORITY);
+            .priority(UPDATED_PRIORITY)
+            .comment(UPDATED_COMMENT);
 
         restAlarmInfoMockMvc.perform(put("/api/alarm-infos")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -229,11 +241,8 @@ public class AlarmInfoResourceIntTest {
         assertThat(alarmInfoList).hasSize(databaseSizeBeforeUpdate);
         AlarmInfo testAlarmInfo = alarmInfoList.get(alarmInfoList.size() - 1);
         assertThat(testAlarmInfo.getTime()).isEqualTo(UPDATED_TIME);
-        assertThat(testAlarmInfo.getLocation()).isEqualTo(UPDATED_LOCATION);
-        assertThat(testAlarmInfo.getGeoposition()).isEqualTo(UPDATED_GEOPOSITION);
-        assertThat(testAlarmInfo.getKeywords()).isEqualTo(UPDATED_KEYWORDS);
-        assertThat(testAlarmInfo.getComment()).isEqualTo(UPDATED_COMMENT);
         assertThat(testAlarmInfo.getPriority()).isEqualTo(UPDATED_PRIORITY);
+        assertThat(testAlarmInfo.getComment()).isEqualTo(UPDATED_COMMENT);
     }
 
     @Test

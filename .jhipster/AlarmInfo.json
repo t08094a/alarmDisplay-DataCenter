@@ -3,30 +3,47 @@
     "fields": [
         {
             "fieldName": "time",
-            "fieldType": "Instant"
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
         },
         {
-            "fieldName": "location",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "geoposition",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "keywords",
-            "fieldType": "String"
+            "fieldName": "priority",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
         },
         {
             "fieldName": "comment",
             "fieldType": "String"
-        },
-        {
-            "fieldName": "priority",
-            "fieldType": "Integer"
         }
     ],
-    "relationships": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "relationshipName": "placeOfAction",
+            "otherEntityName": "placeOfAction",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "alarmInfo"
+        },
+        {
+            "relationshipType": "one-to-one",
+            "relationshipName": "keywords",
+            "otherEntityName": "keywords",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "alarmInfo"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "resources",
+            "otherEntityName": "resource",
+            "otherEntityRelationshipName": "alarmInfo"
+        }
+    ],
     "changelogDate": "20180922223601",
     "entityTableName": "alarm_info",
     "dto": "no",

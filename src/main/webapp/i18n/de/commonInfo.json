@@ -5,7 +5,7 @@
             "home": {
                 "title": "Allgemeine Infos",
                 "createLabel": "Allgemeine Info erstellen",
-                "createOrEditLabel": "Eine neue Allgemeine Info erstellen oder bearbeiten"
+                "createOrEditLabel": "Neue Allgemeine Info erstellen oder bearbeiten"
             },
             "created": "Allgemeine Info erstellt mit ID {{ param }}",
             "updated": "Allgemeine Info aktualisiert mit ID {{ param }}",

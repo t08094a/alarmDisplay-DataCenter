@@ -9,6 +9,11 @@
                 "main": "Entitäten",
                 "alarmInfo": "Alarm Info",
                 "commonInfo": "Allgemeine Info",
+                "placeOfAction": "Einsatzort",
+                "geoPosition": "Geo Position",
+                "keywords": "Stichworte",
+                "resource": "Resource",
+                "equipment": "Ausstattung",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

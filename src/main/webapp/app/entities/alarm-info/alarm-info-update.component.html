@@ -13,35 +13,54 @@
                     <label class="form-control-label" jhiTranslate="dataCenterApp.alarmInfo.time" for="field_time">Time</label>
                     <div class="d-flex">
                         <input id="field_time" type="datetime-local" class="form-control" name="time" [(ngModel)]="time"
-                        />
+                        required/>
+                    </div>
+                    <div [hidden]="!(editForm.controls.time?.dirty && editForm.controls.time?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.time?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.time?.errors?.ZonedDateTimelocal" jhiTranslate="entity.validation.ZonedDateTimelocal">
+                            This field should be a date and time.
+                        </small>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="dataCenterApp.alarmInfo.location" for="field_location">Location</label>
-                    <input type="text" class="form-control" name="location" id="field_location"
-                        [(ngModel)]="alarmInfo.location" />
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="dataCenterApp.alarmInfo.geoposition" for="field_geoposition">Geoposition</label>
-                    <input type="text" class="form-control" name="geoposition" id="field_geoposition"
-                        [(ngModel)]="alarmInfo.geoposition" />
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="dataCenterApp.alarmInfo.keywords" for="field_keywords">Keywords</label>
-                    <input type="text" class="form-control" name="keywords" id="field_keywords"
-                        [(ngModel)]="alarmInfo.keywords" />
+                    <label class="form-control-label" jhiTranslate="dataCenterApp.alarmInfo.priority" for="field_priority">Priority</label>
+                    <input type="number" class="form-control" name="priority" id="field_priority"
+                        [(ngModel)]="alarmInfo.priority" required/>
+                    <div [hidden]="!(editForm.controls.priority?.dirty && editForm.controls.priority?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.priority?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.priority?.errors?.number" jhiTranslate="entity.validation.number">
+                            This field should be a number.
+                        </small>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="dataCenterApp.alarmInfo.comment" for="field_comment">Comment</label>
                     <input type="text" class="form-control" name="comment" id="field_comment"
                         [(ngModel)]="alarmInfo.comment" />
                 </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="dataCenterApp.alarmInfo.priority" for="field_priority">Priority</label>
-                    <input type="number" class="form-control" name="priority" id="field_priority"
-                        [(ngModel)]="alarmInfo.priority" />
-                </div>
 
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="dataCenterApp.alarmInfo.placeOfAction" for="field_placeOfAction">Place Of Action</label>
+                    <select class="form-control" id="field_placeOfAction" name="placeOfAction" [(ngModel)]="alarmInfo.placeOfAction">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="placeOfActionOption.id === alarmInfo.placeOfAction?.id ? alarmInfo.placeOfAction : placeOfActionOption" *ngFor="let placeOfActionOption of placeofactions; trackBy: trackPlaceOfActionById">{{placeOfActionOption.id}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="dataCenterApp.alarmInfo.keywords" for="field_keywords">Keywords</label>
+                    <select class="form-control" id="field_keywords" name="keywords" [(ngModel)]="alarmInfo.keywords">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="keywordsOption.id === alarmInfo.keywords?.id ? alarmInfo.keywords : keywordsOption" *ngFor="let keywordsOption of keywords; trackBy: trackKeywordsById">{{keywordsOption.id}}</option>
+                    </select>
+                </div>
             </div>
             <div>
                 <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">

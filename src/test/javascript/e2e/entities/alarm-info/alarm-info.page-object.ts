@@ -27,11 +27,10 @@ export class AlarmInfoUpdatePage {
     saveButton = element(by.id('save-entity'));
     cancelButton = element(by.id('cancel-save'));
     timeInput = element(by.id('field_time'));
-    locationInput = element(by.id('field_location'));
-    geopositionInput = element(by.id('field_geoposition'));
-    keywordsInput = element(by.id('field_keywords'));
-    commentInput = element(by.id('field_comment'));
     priorityInput = element(by.id('field_priority'));
+    commentInput = element(by.id('field_comment'));
+    placeOfActionSelect = element(by.id('field_placeOfAction'));
+    keywordsSelect = element(by.id('field_keywords'));
 
     async getPageTitle() {
         return this.pageTitle.getAttribute('jhiTranslate');
@@ -45,28 +44,12 @@ export class AlarmInfoUpdatePage {
         return this.timeInput.getAttribute('value');
     }
 
-    async setLocationInput(location) {
-        await this.locationInput.sendKeys(location);
+    async setPriorityInput(priority) {
+        await this.priorityInput.sendKeys(priority);
     }
 
-    async getLocationInput() {
-        return this.locationInput.getAttribute('value');
-    }
-
-    async setGeopositionInput(geoposition) {
-        await this.geopositionInput.sendKeys(geoposition);
-    }
-
-    async getGeopositionInput() {
-        return this.geopositionInput.getAttribute('value');
-    }
-
-    async setKeywordsInput(keywords) {
-        await this.keywordsInput.sendKeys(keywords);
-    }
-
-    async getKeywordsInput() {
-        return this.keywordsInput.getAttribute('value');
+    async getPriorityInput() {
+        return this.priorityInput.getAttribute('value');
     }
 
     async setCommentInput(comment) {
@@ -77,12 +60,42 @@ export class AlarmInfoUpdatePage {
         return this.commentInput.getAttribute('value');
     }
 
-    async setPriorityInput(priority) {
-        await this.priorityInput.sendKeys(priority);
+    async placeOfActionSelectLastOption() {
+        await this.placeOfActionSelect
+            .all(by.tagName('option'))
+            .last()
+            .click();
     }
 
-    async getPriorityInput() {
-        return this.priorityInput.getAttribute('value');
+    async placeOfActionSelectOption(option) {
+        await this.placeOfActionSelect.sendKeys(option);
+    }
+
+    getPlaceOfActionSelect(): ElementFinder {
+        return this.placeOfActionSelect;
+    }
+
+    async getPlaceOfActionSelectedOption() {
+        return this.placeOfActionSelect.element(by.css('option:checked')).getText();
+    }
+
+    async keywordsSelectLastOption() {
+        await this.keywordsSelect
+            .all(by.tagName('option'))
+            .last()
+            .click();
+    }
+
+    async keywordsSelectOption(option) {
+        await this.keywordsSelect.sendKeys(option);
+    }
+
+    getKeywordsSelect(): ElementFinder {
+        return this.keywordsSelect;
+    }
+
+    async getKeywordsSelectedOption() {
+        return this.keywordsSelect.element(by.css('option:checked')).getText();
     }
 
     async save() {
