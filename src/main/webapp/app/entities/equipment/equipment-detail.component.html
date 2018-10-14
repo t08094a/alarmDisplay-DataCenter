@@ -5,7 +5,7 @@
             <hr>
             <jhi-alert-error></jhi-alert-error>
             <dl class="row-md jh-entity-details">
-                <dt><span jhiTranslate="dataCenterApp.equipment.name">Name</span></dt>
+                <dt><span jhiTranslate="dataCenterApp.equipment.name" [ngbTooltip]="'dataCenterApp.equipment.help.name' | translate">Name</span></dt>
                 <dd>
                     <span>{{equipment.name}}</span>
                 </dd>

@@ -35,11 +35,11 @@ public class PlaceOfAction implements Serializable {
     @Column(name = "addition")
     private String addition;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(unique = true)
     private GeoPosition geoPosition;
 
-    @OneToOne(mappedBy = "placeOfAction")
+    @OneToOne(mappedBy = "placeOfAction", fetch = FetchType.LAZY)
     @JsonIgnore
     private AlarmInfo alarmInfo;
 

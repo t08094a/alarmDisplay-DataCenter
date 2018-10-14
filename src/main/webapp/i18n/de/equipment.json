@@ -17,7 +17,10 @@
                 "title": "Ausstattung"
             },
             "name": "Name",
-            "resource": "Resource"
+            "resource": "Resource",
+            "help": {
+                "name": "Der Name der Ausstattung, e.g. \"Wasser 600L\""
+            }
         }
     }
 }

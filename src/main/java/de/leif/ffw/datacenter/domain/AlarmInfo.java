@@ -1,6 +1,5 @@
 package de.leif.ffw.datacenter.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -38,15 +37,15 @@ public class AlarmInfo implements Serializable {
     @Column(name = "jhi_comment")
     private String comment;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(unique = true)
     private PlaceOfAction placeOfAction;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(unique = true)
     private Keywords keywords;
 
-    @OneToMany(mappedBy = "alarmInfo", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "alarmInfo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Resource> resources = new HashSet<>();
 

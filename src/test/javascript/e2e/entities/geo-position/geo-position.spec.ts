@@ -38,10 +38,10 @@ describe('GeoPosition e2e test', () => {
         const nbButtonsBeforeCreate = await geoPositionComponentsPage.countDeleteButtons();
 
         await geoPositionComponentsPage.clickOnCreateButton();
-        await geoPositionUpdatePage.setXInput('5');
-        expect(await geoPositionUpdatePage.getXInput()).to.eq('5');
-        await geoPositionUpdatePage.setYInput('5');
-        expect(await geoPositionUpdatePage.getYInput()).to.eq('5');
+        await geoPositionUpdatePage.setXInput('x');
+        expect(await geoPositionUpdatePage.getXInput()).to.eq('x');
+        await geoPositionUpdatePage.setYInput('y');
+        expect(await geoPositionUpdatePage.getYInput()).to.eq('y');
         await geoPositionUpdatePage.save();
         expect(await geoPositionUpdatePage.getSaveButton().isPresent()).to.be.false;
 

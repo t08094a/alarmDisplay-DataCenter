@@ -22,7 +22,16 @@
             "showEndDate": "Anzeige-Ende",
             "alarmRelevant": "Ist relevant bei Alarmierung?",
             "alarmRelevantStartDate": "Anzeige-Start wenn bei Alarmierung relevant",
-            "alarmRelevantEndDate": "Anzeige-Stop wenn bei Alarmierung relevant"
+            "alarmRelevantEndDate": "Anzeige-Stop wenn bei Alarmierung relevant",
+            "help": {
+                "title": "Titel der Info",
+                "description": "Die Beschreibung der Info",
+                "showStartDate": "Startzeit zur Anzeige der Info",
+                "showEndDate": "Endzeit um die Anzeige zu verstecken",
+                "alarmRelevant": "Ist die Info relevant, falls ein Alarm in dem folgendem Zeitraum eintritt?",
+                "alarmRelevantStartDate": "Startzeit für die Alarm-Relevanz",
+                "alarmRelevantEndDate": "Endzeit für die Alarm-Relevanz"
+            }
         }
     }
 }

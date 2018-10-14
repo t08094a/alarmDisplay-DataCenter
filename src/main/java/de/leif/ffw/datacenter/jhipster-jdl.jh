@@ -12,8 +12,8 @@ entity PlaceOfAction {
 }
 
 entity GeoPosition {
-	x Double required,
-    y Double required
+	x String required,
+    y String required
 }
 
 entity Keywords {
@@ -25,21 +25,32 @@ entity Keywords {
     t String
 }
 
+/** E.g. a vehicle */
 entity Resource {
-	name String,
+	/** the name of the resource, e.g. LF8 */
+	name String
 }
 
+/** E.g. an item belonging to the resource */
 entity Equipment {
+	/** the name of the equipement, e.g. 'water 600l' */
 	name String
 }
 
 entity CommonInfo {
+	/** the title */
 	title String,
+    /** the description of the info */
     description String,
+    /** the duration start to show the info */
     showStartDate LocalDate,
+    /** the duration end to hide the info */
     showEndDate LocalDate,
+    /** is this info relevant for alarms in the given duration */
     alarmRelevant Boolean,
+    /** the duration start of an alarm relevant info */
     alarmRelevantStartDate LocalDate,
+    /** the duration end of an alarm relevant info */
     alarmRelevantEndDate LocalDate
 }
 

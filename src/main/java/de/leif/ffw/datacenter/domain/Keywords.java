@@ -41,7 +41,7 @@ public class Keywords implements Serializable {
     @Column(name = "t")
     private String t;
 
-    @OneToOne(mappedBy = "keywords")
+    @OneToOne(mappedBy = "keywords", fetch = FetchType.LAZY)
     @JsonIgnore
     private AlarmInfo alarmInfo;
 

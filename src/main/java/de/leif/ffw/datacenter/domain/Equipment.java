@@ -1,6 +1,8 @@
 package de.leif.ffw.datacenter.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -10,8 +12,9 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * A Equipment.
+ * E.g. an item belonging to the resource
  */
+@ApiModel(description = "E.g. an item belonging to the resource")
 @Entity
 @Table(name = "equipment")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -23,11 +26,15 @@ public class Equipment implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * the name of the equipement, e.g. 'water 600l'
+     */
+    @ApiModelProperty(value = "the name of the equipement, e.g. 'water 600l'")
     @Column(name = "name")
     private String name;
 
-    @ManyToOne
-    @JsonIgnoreProperties("equipment")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("equipments")
     private Resource resource;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

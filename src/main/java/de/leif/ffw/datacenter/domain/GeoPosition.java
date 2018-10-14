@@ -26,13 +26,13 @@ public class GeoPosition implements Serializable {
 
     @NotNull
     @Column(name = "x", nullable = false)
-    private Double x;
+    private String x;
 
     @NotNull
     @Column(name = "y", nullable = false)
-    private Double y;
+    private String y;
 
-    @OneToOne(mappedBy = "geoPosition")
+    @OneToOne(mappedBy = "geoPosition", fetch = FetchType.LAZY)
     @JsonIgnore
     private PlaceOfAction placeOfAction;
 
@@ -45,29 +45,29 @@ public class GeoPosition implements Serializable {
         this.id = id;
     }
 
-    public Double getX() {
+    public String getX() {
         return x;
     }
 
-    public GeoPosition x(Double x) {
+    public GeoPosition x(String x) {
         this.x = x;
         return this;
     }
 
-    public void setX(Double x) {
+    public void setX(String x) {
         this.x = x;
     }
 
-    public Double getY() {
+    public String getY() {
         return y;
     }
 
-    public GeoPosition y(Double y) {
+    public GeoPosition y(String y) {
         this.y = y;
         return this;
     }
 
-    public void setY(Double y) {
+    public void setY(String y) {
         this.y = y;
     }
 
@@ -109,8 +109,8 @@ public class GeoPosition implements Serializable {
     public String toString() {
         return "GeoPosition{" +
             "id=" + getId() +
-            ", x=" + getX() +
-            ", y=" + getY() +
+            ", x='" + getX() + "'" +
+            ", y='" + getY() + "'" +
             "}";
     }
 }

@@ -18,11 +18,11 @@
         Added the entity Equipment.
     -->
     <changeSet id="20181007111528-1" author="jhipster">
-        <createTable tableName="equipment">
+        <createTable tableName="equipment" remarks="E.g. an item belonging to the resource">
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="name" type="varchar(255)">
+            <column name="name" type="varchar(255)" remarks="the name of the equipement, e.g. &apos;water 600l&apos;">
                 <constraints nullable="true" />
             </column>
 

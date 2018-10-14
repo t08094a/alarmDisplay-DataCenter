@@ -3,6 +3,7 @@
     "fields": [
         {
             "fieldName": "name",
+            "javadoc": "the name of the resource, e.g. LF8",
             "fieldType": "String"
         }
     ],
@@ -21,6 +22,7 @@
         }
     ],
     "changelogDate": "20181007111527",
+    "javadoc": "E.g. a vehicle",
     "entityTableName": "resource",
     "dto": "no",
     "pagination": "no",

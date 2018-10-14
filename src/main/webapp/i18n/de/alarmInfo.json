@@ -19,7 +19,7 @@
             "time": "Alarmzeit",
             "priority": "Priorität",
             "comment": "Bemerkung",
-            "placeOfAction": "Zielort",
+            "placeOfAction": "Einsatzort",
             "keywords": "Stichworte",
             "resources": "benötigte Ausstattung"
         }

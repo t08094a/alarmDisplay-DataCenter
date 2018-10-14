@@ -10,7 +10,7 @@
                         [(ngModel)]="equipment.id" readonly />
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="dataCenterApp.equipment.name" for="field_name">Name</label>
+                    <label class="form-control-label" jhiTranslate="dataCenterApp.equipment.name" for="field_name" [ngbTooltip]="'dataCenterApp.equipment.help.name' | translate">Name</label>
                     <input type="text" class="form-control" name="name" id="field_name"
                         [(ngModel)]="equipment.name" />
                 </div>

@@ -3,14 +3,14 @@
     "fields": [
         {
             "fieldName": "x",
-            "fieldType": "Double",
+            "fieldType": "String",
             "fieldValidateRules": [
                 "required"
             ]
         },
         {
             "fieldName": "y",
-            "fieldType": "Double",
+            "fieldType": "String",
             "fieldValidateRules": [
                 "required"
             ]

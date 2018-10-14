@@ -39,11 +39,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = DataCenterApp.class)
 public class GeoPositionResourceIntTest {
 
-    private static final Double DEFAULT_X = 1D;
-    private static final Double UPDATED_X = 2D;
+    private static final String DEFAULT_X = "AAAAAAAAAA";
+    private static final String UPDATED_X = "BBBBBBBBBB";
 
-    private static final Double DEFAULT_Y = 1D;
-    private static final Double UPDATED_Y = 2D;
+    private static final String DEFAULT_Y = "AAAAAAAAAA";
+    private static final String UPDATED_Y = "BBBBBBBBBB";
 
     @Autowired
     private GeoPositionRepository geoPositionRepository;
@@ -178,8 +178,8 @@ public class GeoPositionResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(geoPosition.getId().intValue())))
-            .andExpect(jsonPath("$.[*].x").value(hasItem(DEFAULT_X.doubleValue())))
-            .andExpect(jsonPath("$.[*].y").value(hasItem(DEFAULT_Y.doubleValue())));
+            .andExpect(jsonPath("$.[*].x").value(hasItem(DEFAULT_X.toString())))
+            .andExpect(jsonPath("$.[*].y").value(hasItem(DEFAULT_Y.toString())));
     }
     
     @Test
@@ -193,8 +193,8 @@ public class GeoPositionResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(geoPosition.getId().intValue()))
-            .andExpect(jsonPath("$.x").value(DEFAULT_X.doubleValue()))
-            .andExpect(jsonPath("$.y").value(DEFAULT_Y.doubleValue()));
+            .andExpect(jsonPath("$.x").value(DEFAULT_X.toString()))
+            .andExpect(jsonPath("$.y").value(DEFAULT_Y.toString()));
     }
 
     @Test

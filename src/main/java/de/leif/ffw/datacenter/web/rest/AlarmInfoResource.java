@@ -86,7 +86,9 @@ public class AlarmInfoResource {
     @Timed
     public List<AlarmInfo> getAllAlarmInfos() {
         log.debug("REST request to get all AlarmInfos");
-        return alarmInfoRepository.findAll();
+        List<AlarmInfo> all = alarmInfoRepository.findAll();
+
+        return all;
     }
 
     /**

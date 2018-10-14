@@ -2,6 +2,8 @@ package de.leif.ffw.datacenter.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -13,8 +15,9 @@ import java.util.Set;
 import java.util.Objects;
 
 /**
- * A Resource.
+ * E.g. a vehicle
  */
+@ApiModel(description = "E.g. a vehicle")
 @Entity
 @Table(name = "resource")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -26,14 +29,18 @@ public class Resource implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * the name of the resource, e.g. LF8
+     */
+    @ApiModelProperty(value = "the name of the resource, e.g. LF8")
     @Column(name = "name")
     private String name;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JsonIgnoreProperties("resources")
     private AlarmInfo alarmInfo;
 
-    @OneToMany(mappedBy = "resource")
+    @OneToMany(mappedBy = "resource", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Equipment> equipments = new HashSet<>();
 

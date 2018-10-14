@@ -3,18 +3,20 @@
     "fields": [
         {
             "fieldName": "name",
+            "javadoc": "the name of the equipement, e.g. 'water 600l'",
             "fieldType": "String"
         }
     ],
     "relationships": [
         {
-            "relationshipType": "many-to-one",
             "relationshipName": "resource",
             "otherEntityName": "resource",
+            "relationshipType": "many-to-one",
             "otherEntityField": "id"
         }
     ],
     "changelogDate": "20181007111528",
+    "javadoc": "E.g. an item belonging to the resource",
     "entityTableName": "equipment",
     "dto": "no",
     "pagination": "no",

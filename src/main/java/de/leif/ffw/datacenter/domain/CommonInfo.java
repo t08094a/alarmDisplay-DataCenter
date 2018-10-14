@@ -1,5 +1,6 @@
 package de.leif.ffw.datacenter.domain;
 
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -23,24 +24,52 @@ public class CommonInfo implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * the title
+     */
+    @ApiModelProperty(value = "the title")
     @Column(name = "title")
     private String title;
 
+    /**
+     * the description of the info
+     */
+    @ApiModelProperty(value = "the description of the info")
     @Column(name = "description")
     private String description;
 
+    /**
+     * the duration start to show the info
+     */
+    @ApiModelProperty(value = "the duration start to show the info")
     @Column(name = "show_start_date")
     private LocalDate showStartDate;
 
+    /**
+     * the duration end to hide the info
+     */
+    @ApiModelProperty(value = "the duration end to hide the info")
     @Column(name = "show_end_date")
     private LocalDate showEndDate;
 
+    /**
+     * is this info relevant for alarms in the given duration
+     */
+    @ApiModelProperty(value = "is this info relevant for alarms in the given duration")
     @Column(name = "alarm_relevant")
     private Boolean alarmRelevant;
 
+    /**
+     * the duration start of an alarm relevant info
+     */
+    @ApiModelProperty(value = "the duration start of an alarm relevant info")
     @Column(name = "alarm_relevant_start_date")
     private LocalDate alarmRelevantStartDate;
 
+    /**
+     * the duration end of an alarm relevant info
+     */
+    @ApiModelProperty(value = "the duration end of an alarm relevant info")
     @Column(name = "alarm_relevant_end_date")
     private LocalDate alarmRelevantEndDate;
 

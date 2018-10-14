@@ -18,7 +18,10 @@
             },
             "name": "Name",
             "alarmInfo": "Alarm Info",
-            "equipments": "Ausstattung"
+            "equipments": "Ausstattung",
+            "help": {
+                "name": "Der Name der Resource, z.B. \"LF8\""
+            }
         }
     }
 }
