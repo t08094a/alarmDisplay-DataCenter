@@ -1,0 +1,20 @@
+#########################
+## Architecture: __BASEIMAGE_ARCH__
+#########################
+
+
+FROM __BASEIMAGE_ARCH__/node:__NODE_TAG__
+
+WORKDIR /app
+
+__CROSS_COPY qemu/qemu-__QEMU_ARCH__-static /usr/bin/
+
+COPY . /app
+
+RUN rm -f Dockerfile* && rm -rf qemu* && \
+    yarn install && \
+    chmod +x entrypoint.sh
+
+ENTRYPOINT ["./entrypoint.sh"]
+
+EXPOSE 3000

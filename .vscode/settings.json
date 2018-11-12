@@ -1,0 +1,10 @@
+{
+    "debug.node.autoAttach": "on",
+    "eslint.packageManager": "yarn",
+    "[makefile]": {
+        "editor.insertSpaces": false
+    },
+    "files.associations": {
+        "Dockerfile*": "dockerfile"
+    }
+}

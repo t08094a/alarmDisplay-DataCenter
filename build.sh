@@ -46,13 +46,15 @@ fi
 
 # Build source
 yarn install
-yarn build
-./mvnw package -Pprod -Ddockerfile.skip
+yarn build --prod
+
+# copy package.json to output folder to be available in docker images
+cp package.json dist/
 
 # Build docker images
 base_dir=$(dirname "$(readlink -f "$0")" )
-target_dir=${base_dir}/target
-dockerfile_dir=${base_dir}/src/main/docker
+target_dir=${base_dir}/dist
+dockerfile_dir=${base_dir}/docker
 
 # Register QEMU in the build agent
 docker run --rm --privileged multiarch/qemu-user-static:register --reset
@@ -62,18 +64,23 @@ for docker_arch in ${TARGET_ARCHES}; do
 
   case ${docker_arch} in
     amd64       ) qemu_arch="x86_64"
-                  image_openjdk_tag="8-jre-alpine" ;;
+                  image_node_tag="alpine" ;;
     arm32v[5-7] ) qemu_arch="arm"
-                  image_openjdk_tag="11-jre-slim" ;;
+                  image_node_tag="slim" ;;
     arm64v8     ) qemu_arch="aarch64"
-                  image_openjdk_tag="8-jre-slim" ;;
+                  image_node_tag="alpine" ;;
     *)
       echo ERROR: Unknown target arch.
       exit 1
   esac
+
+  echo "copy adaptable Dockerfile for architecture ${docker_arch} to output folder ${target_dir}:"
   cp ${dockerfile_dir}/Dockerfile.cross ${target_dir}/Dockerfile.${docker_arch}
+  cp ${dockerfile_dir}/entrypoint.sh ${target_dir}/
+
+  echo "adapt architecture specific Dockerfile in output folder..."
   sed -i "s|__BASEIMAGE_ARCH__|${docker_arch}|g" ${target_dir}/Dockerfile.${docker_arch}
-  sed -i "s|__OPENJDK_TAG__|${image_openjdk_tag}|g" ${target_dir}/Dockerfile.${docker_arch}
+  sed -i "s|__NODE_TAG__|${image_node_tag}|g" ${target_dir}/Dockerfile.${docker_arch}
   sed -i "s|__QEMU_ARCH__|${qemu_arch}|g" ${target_dir}/Dockerfile.${docker_arch}
   if [[ ${docker_arch} == "amd64" || ${build_os} == "darwin" ]]; then
     sed -i "/__CROSS_/d" ${target_dir}/Dockerfile.${docker_arch}
@@ -82,11 +89,13 @@ for docker_arch in ${TARGET_ARCHES}; do
   fi
 
   # copy qemu to target
+  echo "copy qemu to output folder..."
   mkdir -p ${target_dir}/qemu
   [ -e ${base_dir}/qemu/qemu-${qemu_arch}-static ] && cp ${base_dir}/qemu/qemu-${qemu_arch}-static ${target_dir}/qemu/qemu-${qemu_arch}-static
 
   pushd ${target_dir}
 
+  echo "build the docker container..."
   docker build -f Dockerfile.${docker_arch} -t ${REPO}/${IMAGE_NAME}:${docker_arch}-${IMAGE_VERSION} .
   docker push ${REPO}/${IMAGE_NAME}:${docker_arch}-${IMAGE_VERSION}
   arch_images="${arch_images} ${REPO}/${IMAGE_NAME}:${docker_arch}-${IMAGE_VERSION}"
@@ -98,8 +107,9 @@ for docker_arch in ${TARGET_ARCHES}; do
   popd
 done
 
-echo INFO: Creating fat manifest for ${REPO}/${IMAGE_NAME}:${IMAGE_VERSION}
-echo INFO: with subimages: ${arch_images}
+echo ""
+echo "INFO: Creating fat manifest for ${REPO}/${IMAGE_NAME}:${IMAGE_VERSION}"
+echo "INFO: with subimages: ${arch_images}"
 if [ -d ${HOME}/.docker/manifests/docker.io_${REPO}_${IMAGE_NAME}-${IMAGE_VERSION} ]; then
   rm -rf ${HOME}/.docker/manifests/docker.io_${REPO}_${IMAGE_NAME}-${IMAGE_VERSION}
 fi

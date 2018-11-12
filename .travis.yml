@@ -11,33 +11,22 @@ language: node_js
 node_js:
   - "8.11.3"
 
-jdk:
-  - oraclejdk8
-
 cache:
   yarn: true
   directories:
-    - node
     - node_modules
-    - $HOME/.m2
     - $HOME/.yarn-cache
 
 env:
   global:
     - VERSION=1.${TRAVIS_BUILD_NUMBER}
     - NODE_VERSION=8.11.3
-    - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
-    - SPRING_JPA_SHOW_SQL=false
 
 before_install:
   - sudo apt-get install -y -qq coreutils
-  - jdk_switcher use oraclejdk8
-  - java -version
-  - sudo /etc/init.d/mysql stop
-  - sudo /etc/init.d/postgresql stop
   # Repo for Yarn
-  - curl -o- -L https://yarnpkg.com/install.sh | bash -s
-  - export PATH="$HOME/.yarn/bin:$PATH"
+#   - curl -o- -L https://yarnpkg.com/install.sh | bash -s
+#   - export PATH="$HOME/.yarn/bin:$PATH"
 
   - wget https://github.com/clnperez/cli/releases/download/1.0/docker-linux-amd64
   - chmod 755 docker-linux-amd64

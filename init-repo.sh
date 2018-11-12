@@ -34,11 +34,11 @@ else
   echo INFO: Running on Mac, skipping Qemu build.
 fi
 
-if [[ ! -f  ${ABS_DEST}/src/main/docker/Dockerfile.cross ]]; then
-cat << EOF > ${ABS_DEST}/src/main/docker/Dockerfile.cross
+if [[ ! -f  ${ABS_DEST}/docker/Dockerfile.cross ]]; then
+cat << EOF > ${ABS_DEST}/docker/Dockerfile.cross
 FROM __BASEIMAGE_ARCH__/alpine:latest
 
-__CROSS_COPY ../../../qemu/qemu-__QEMU_ARCH__-static /usr/bin/
+__CROSS_COPY ../qemu/qemu-__QEMU_ARCH__-static /usr/bin/
 EOF
 else
   echo INFO: Dockerfile.cross already exists, skipping

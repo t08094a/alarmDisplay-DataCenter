@@ -1,0 +1,14 @@
+version: '2'
+services:
+  datacenter-mongo-express:
+    image: mongo-express:latest
+    container_name: mongo-express
+    # environment:
+    #   - ME_CONFIG_MONGODB_SERVER = localhost
+      # - ME_CONFIG_MONGODB_ADMINUSERNAME = admin
+      # - ME_CONFIG_MONGODB_ADMINPASSWORD = admin
+      # - ME_CONFIG_MONGODB_AUTH_USERNAME = {{USERNAME}}
+      # - ME_CONFIG_MONGODB_AUTH_PASSWORD = {{PWD}}
+      # - ME_CONFIG_SITE_SSL_ENABLED = false
+    ports:
+        - "8081:8081"

@@ -1,0 +1,15 @@
+version: '2'
+services:
+  datacenter-mongodb:
+    image: mongo:latest
+    container_name: datacenter-mongo
+    # volumes:
+    # - ~/volumes/datacenter/mongodb/:/data/db/
+    # environment:
+      # - MONGO_INITDB_ROOT_USERNAME = admin
+      # - MONGO_INITDB_ROOT_PASSWORD = admin
+      # - MONGO_INITDB_ROOT_USERNAME= "{{USERNAME}}"
+      # - MONGO_INITDB_ROOT_PASSWORD= "{{PWD}}"
+      # - MONGO_INITDB_DATABASE= "{{DBNAME}}"
+    ports:
+        - "27017:27017"
