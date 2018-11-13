@@ -21,12 +21,6 @@ services:
         volumes:
             - datacenter-mongodb_volume:/data/db/
 
-    datacenter-rabbitmq:
-        extends:
-            file: rabbitmq.yml
-            service: datacenter-rabbitmq
-        restart: unless-stopped
-
     # datacenter-mongo-express:
     #     extends:
     #         file: mongoexpress.yml
