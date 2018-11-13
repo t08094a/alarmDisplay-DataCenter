@@ -1,5 +1,6 @@
 module.exports = (app) => {
   const AlarmInfo = require('../controllers/alarm-info.controller.js');
+  AlarmInfo.initialize(app);
 
   // Create a new alarm-info
   app.post('/alarm-info', AlarmInfo.create);
