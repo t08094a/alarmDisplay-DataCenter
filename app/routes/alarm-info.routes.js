@@ -16,4 +16,7 @@ module.exports = (app) => {
 
   // Delete a alarm-info with alarmId
   app.delete('/alarm-info/:alarmId', AlarmInfo.delete);
+
+  // Retrieves the current alarm-info if there is any in the last 15 minutes
+  app.get('/current-alarm-info', AlarmInfo.findCurrentAlarmInfo);
 }

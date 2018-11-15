@@ -71,6 +71,28 @@ exports.findOne = (req, res) => {
         });
 };
 
+// Find a current alarm info in the last 15 minutes.
+exports.findCurrentAlarmInfo = (req, res) => {
+
+    console.log('>>> search...');
+
+    const start = new Date();
+    start.setMinutes(start.getMinutes() - 15);
+    const end = new Date(2100, 11, 31);
+
+    AlarmInfo.find({"time": {"$gte": start, "$lt": end}})
+    .sort({time: 'desc'})
+    .limit(1)
+    .then(current_alarm => {
+        console.log('found current alarm-info:\n%s', JSON.stringify(current_alarm));
+        res.send(current_alarm);
+    }).catch(err => {
+        res.status(500).send({
+            message: err.message || "Some error occurred while retrieving the current alarm-info."
+        });
+    });
+}
+
 // Update a alarm-info identified by the alarmId in the request
 exports.update = (req, res) => {
     // validate request
