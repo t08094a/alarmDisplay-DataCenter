@@ -12,19 +12,22 @@ app.use(express.json());
 
 // middleware to use for all requests
 router.use(function(req, res, next) {
-  // do logging
-  console.log('Something is happening.');
+  var origin = req.headers.origin;
 
-  // add http headers
-  // Website you wish to allow to connect
-  // res.setHeader('Access-Control-Allow-Origin', ['http://localhost:*', 'http://alarmmonitor.local:*', 'http://datacenter-app:*']);
-  // res.setHeader('Access-Control-Allow-Origin', '*:*');
+  // do logging
+  console.log('incomming connection from:', origin);
+
+  // add http headers Website you wish to allow to connect
+  const whitelist = ['http://localhost:4200', 'http://alarmmonitor.local:80'];
+  if(whitelist.indexOf(origin) > -1){
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
 
   // Request methods you wish to allow
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
 
   // Request headers you wish to allow
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Authorization');
 
   // Set to true if you need the website to include cookies in the requests sent
   // to the API (e.g. in case you use sessions)
