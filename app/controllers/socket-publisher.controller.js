@@ -3,6 +3,7 @@ let io;
 exports.initialize = (app) => {
     const http = require('http').createServer(app);
     io = require('socket.io')(http);
+    io.origins('*:*');
 
     io.on('connection', (socket) => {
         // Log whenever a user connects

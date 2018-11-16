@@ -17,7 +17,7 @@ router.use(function(req, res, next) {
 
   // add http headers
   // Website you wish to allow to connect
-  res.setHeader('Access-Control-Allow-Origin', ['http://localhost:4200', 'http://datacenter-app:9001', 'http://datacenter-app:80']);
+  res.setHeader('Access-Control-Allow-Origin', ['http://localhost:*', 'http://alarmmonitor.local:*', 'http://datacenter-app:*']);
 
   // Request methods you wish to allow
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
