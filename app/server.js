@@ -2,7 +2,7 @@ import express, { Router } from "express";
 import { urlencoded } from "body-parser";
 
 // add timestamps in front of log messages
-require('console-stamp')(console, {pattern: 'dd.mm.yyyy HH:MM:ss.l', label: true});
+require('console-stamp')(console, {pattern: 'yyyy-mm-dd HH:MM:ss.l', label: true});
 
 // create express app
 var app         =   express();
