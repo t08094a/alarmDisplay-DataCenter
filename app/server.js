@@ -1,8 +1,12 @@
 import express, { Router } from "express";
-import { urlencoded, json } from "body-parser";
+import { urlencoded } from "body-parser";
+
+// add timestamps in front of log messages
+require('console-stamp')(console, {pattern: 'dd.mm.yyyy HH:MM:ss.l', label: true});
 
 // create express app
 var app         =   express();
+var httpServer  =   require('http').Server(app);
 var router      =   Router();
 
 // parse requests of content-type - application/x-www-form-urlencoded
@@ -12,10 +16,10 @@ app.use(express.json());
 
 // middleware to use for all requests
 router.use(function(req, res, next) {
-  var origin = req.headers.origin;
+  const origin = req.headers.origin;
 
   // do logging
-  console.log('incomming connection from:', origin);
+  //console.info('incomming connection from:', origin);
 
   // add http headers Website you wish to allow to connect
   const whitelist = ['http://localhost:4200', 'http://alarmmonitor.local:80'];
@@ -50,13 +54,12 @@ import mongoOp from "./mongo.js";
 app.use('/',router);
 
 router.get("/",function(req,res){
-  res.json({
-    "message" : "hooray! welcome to our alarmmonitor-datacenter api!"
-  });
+  res.json({"message" : "hooray! welcome to our alarmmonitor-datacenter api!"});
 });
 
-require('./routes/alarm-info.routes.js')(app);
+require('./routes/alarm-info.routes.js')(app, httpServer);
 
 // listen for requests
-app.listen(3000);
-console.log("Listening to PORT 3000");
+// WARNING: app.listen(3000) will NOT work here!
+httpServer.listen(3000);
+console.info("Listening to PORT 3000");

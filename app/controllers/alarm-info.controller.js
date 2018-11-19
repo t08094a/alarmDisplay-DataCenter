@@ -2,10 +2,10 @@ const AlarmInfo = require('../models/alarm-info.model.js');
 
 let _socketPublisher;
 
-exports.initialize = (app) => {
+exports.initialize = (app, httpServer) => {
     // create socket.io server
     _socketPublisher = require('./socket-publisher.controller.js');
-    _socketPublisher.initialize(app);
+    _socketPublisher.initialize(app, httpServer);
 }
 
 // create and save a new alarm-info
@@ -34,7 +34,7 @@ exports.create = (req, res) => {
 
     // send broadcast to all listener
     console.log('Publish new alarm-info to all listeners');
-    _socketPublisher.sendMessage('alarm-info', JSON.stringify(alarm_info))
+    _socketPublisher.sendMessage('ws-alarm-info', JSON.stringify(alarm_info))
 };
 
 // Retrieve and return all alarm-infos from the database.
