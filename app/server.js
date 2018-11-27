@@ -22,7 +22,7 @@ router.use(function(req, res, next) {
   //console.info('incomming connection from:', origin);
 
   // add http headers Website you wish to allow to connect
-  const whitelist = ['http://localhost:4200', 'http://alarmmonitor.local:80'];
+  const whitelist = ['http://localhost:4200', 'http://alarmmonitor.local:80', 'http://alarmdisplay-datacenter:9002'];
   if(whitelist.indexOf(origin) > -1){
     res.setHeader('Access-Control-Allow-Origin', origin);
   }
