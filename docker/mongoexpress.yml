@@ -1,8 +1,8 @@
 version: '2'
 services:
-  datacenter-mongo-express:
+  datacenter-mongodb-express:
     image: mongo-express:latest
-    container_name: mongo-express
+    container_name: datacenter-mongodb-express
     # environment:
     #   - ME_CONFIG_MONGODB_SERVER = localhost
       # - ME_CONFIG_MONGODB_ADMINUSERNAME = admin
