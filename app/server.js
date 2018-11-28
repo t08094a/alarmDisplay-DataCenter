@@ -19,12 +19,14 @@ router.use(function(req, res, next) {
   const origin = req.headers.origin;
 
   // do logging
-  //console.info('incomming connection from:', origin);
+  console.info('incomming connection from:', origin);
 
   // add http headers Website you wish to allow to connect
-  const whitelist = ['http://localhost:4200', 'http://alarmmonitor.local:80', 'http://alarmdisplay-datacenter:9002'];
-  if(whitelist.indexOf(origin) > -1){
+  const whitelist = ['http://localhost:4200', 'http://alarmmonitor.local:80', 'http://app.alarmdisplay.local:9001', 'http://app.alarmdisplay.local:4200'];
+  if(origin && (origin.startsWith('http://localhost') || whitelist.indexOf(origin) > -1)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
+  } else if(!origin) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
   }
 
   // Request methods you wish to allow
